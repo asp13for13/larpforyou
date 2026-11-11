@@ -4,95 +4,56 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>larp my vibe — the song for your story</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f7f4ef;--fg:#121017;--muted:#645f72;--card:#ffffff;--line:#eae4dc;
-  --accent:#ff2a6d;--accent2:#7000ff;--ok:#10b981;
-  --glow:rgba(255, 42, 109, 0.12);
-  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#07050a;--fg:#f3f0f7;--muted:#9892a6;--card:#120f1a;--line:#231e30;
-    --glow:rgba(255, 42, 109, 0.2);
-    color-scheme:dark
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#07050a;--fg:#f3f0f7;--muted:#9892a6;--card:#120f1a;--line:#231e30;
-  --glow:rgba(255, 42, 109, 0.2);
-  color-scheme:dark
-}
-*{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 "Plus Jakarta Sans",system-ui,-apple-system,sans-serif;letter-spacing:-0.01em}
-main{max-width:500px;margin:0 auto;padding:36px 20px 60px}
-
-h1{font-size:2.4rem;font-weight:800;line-height:1.05;margin:0.2rem 0;letter-spacing:-.03em}
-h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:var(--muted);font-size:0.98rem;margin:0 0 28px;font-weight:400}
-
-.drop{display:block;border:2px dashed var(--line);border-radius:24px;background:var(--card);padding:40px 20px;text-align:center;cursor:pointer;transition:all .25s cubic-bezier(0.16, 1, 0.3, 1);box-shadow:0 8px 30px rgba(0,0,0,0.02)}
-.drop:hover,.drop.on{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 12px 40px var(--glow)}
-.drop b{display:block;font-size:1.15rem;font-weight:700;margin-bottom:4px}.drop small{color:var(--muted);font-size:0.88rem}
+:root{--bg:#fbf7f2;--fg:#1c1a22;--muted:#6d6878;--card:#fff;--line:#e6dfd6;--accent:#ff4f81;--accent2:#7a5cff;--ok:#1f9d63;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f0d14;--fg:#f4f1fa;--muted:#a49fb3;--card:#1a1722;--line:#2c2838;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f0d14;--fg:#f4f1fa;--muted:#a49fb3;--card:#1a1722;--line:#2c2838;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 "DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:520px;margin:0 auto;padding:28px 18px 48px}
+h1{font-size:2rem;line-height:1.1;margin:0 0 6px;letter-spacing:-.02em}
+h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);margin:0 0 22px}
+.drop{display:block;border:2px dashed var(--line);border-radius:20px;background:var(--card);padding:34px 18px;text-align:center;cursor:pointer;transition:.15s}
+.drop:hover,.drop.on{border-color:var(--accent)}
+.drop b{display:block;font-size:1.1rem}.drop small{color:var(--muted)}
 input[type=file]{display:none}
-
-#prev{display:none;width:100%;max-height:360px;object-fit:cover;border-radius:24px;margin-bottom:16px;box-shadow:0 12px 36px rgba(0,0,0,0.15)}
-
-.card{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:24px;margin-top:16px;box-shadow:0 16px 48px rgba(0,0,0,0.04);animation:fadeIn .4s cubic-bezier(0.16, 1, 0.3, 1)}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-
-.tag{display:inline-block;font-size:.75rem;padding:4px 12px;border-radius:99px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
-.vibe{font-size:1.5rem;font-weight:800;margin:10px 0 2px;letter-spacing:-.02em}
-.cap{color:var(--muted);margin:0 0 18px;font-size:0.95rem}
-
-.song{display:flex;gap:14px;align-items:center;padding:14px;border-radius:18px;background:var(--bg);border:1px solid var(--line)}
-.disc{flex:none;width:52px;height:52px;border-radius:50%;background:conic-gradient(var(--accent),var(--accent2),var(--accent));display:grid;place-items:center;color:#fff;font-size:1.2rem;box-shadow:0 4px 12px var(--glow);animation:spin 12s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.song h3{margin:0;font-size:1.02rem;font-weight:700}.song p{margin:0;color:var(--muted);font-size:0.88rem}
-
-.meter{height:8px;border-radius:9px;background:var(--line);overflow:hidden;margin:14px 0 4px}
-.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 1s cubic-bezier(0.16, 1, 0.3, 1)}
-
-.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-button,a.btn{font:inherit;font-weight:600;font-size:0.9rem;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:11px 16px;border-radius:14px;cursor:pointer;text-decoration:none;transition:all .2s}
-button:hover,a.btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+#prev{display:none;width:100%;max-height:380px;object-fit:cover;border-radius:20px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:14px}
+.tag{display:inline-block;font-size:.78rem;padding:3px 10px;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:600}
+.vibe{font-size:1.35rem;font-weight:700;margin:8px 0 2px}
+.cap{color:var(--muted);margin:0 0 14px}
+.song{display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}
+.disc{flex:none;width:52px;height:52px;border-radius:50%;background:conic-gradient(var(--accent),var(--accent2),var(--accent));display:grid;place-items:center;color:#fff;font-size:1.3rem}
+.song h3{margin:0;font-size:1.05rem}.song p{margin:0;color:var(--muted);font-size:.9rem}
+.meter{height:8px;border-radius:9px;background:var(--line);overflow:hidden;margin:12px 0 4px}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .8s}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+button,a.btn{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:10px 14px;border-radius:12px;cursor:pointer;text-decoration:none}
 button.pri{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-button.pri:hover{opacity:0.9}
-
-.tip{font-size:.85rem;color:var(--muted);margin-top:12px;line-height:1.4}
+.tip{font-size:.85rem;color:var(--muted);margin-top:12px}
 .hide{display:none}
-
-.alt{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.alt button{font-weight:600;font-size:.82rem;padding:7px 12px;border-radius:10px}
-.alt button.cur{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-
-.story{position:relative;aspect-ratio:9/12;max-height:400px;margin:0 auto 14px;border-radius:20px;overflow:hidden;background:#000;box-shadow:0 12px 30px rgba(0,0,0,0.2)}
+.alt{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.alt button{font-weight:500;font-size:.85rem;padding:6px 10px}
+.alt button.cur{border-color:var(--accent);color:var(--accent)}
+.story{position:relative;aspect-ratio:9/12;max-height:420px;margin:0 auto 12px;border-radius:18px;overflow:hidden;background:#000}
 .story img{width:100%;height:100%;object-fit:cover}
-.stk{position:absolute;left:14px;right:14px;bottom:14px;display:flex;gap:10px;align-items:center;background:rgba(15,13,20,0.75);color:#fff;padding:10px 14px;border-radius:16px;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1)}
-.stk .disc{width:36px;height:36px;font-size:.9rem}
-.stk b{font-size:.95rem;font-weight:700}.stk small{display:block;opacity:.7;font-size:.78rem}
-.cb{position:absolute;top:14px;left:14px;background:rgba(15,13,20,0.75);color:#fff;font-size:.78rem;font-weight:700;padding:5px 12px;border-radius:99px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}
-
-.map{position:relative;height:28px;border-radius:10px;background:var(--line);overflow:hidden;margin-top:8px}
-.map .hook{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--accent) 40%,transparent)}
-.map .win{position:absolute;top:2px;bottom:2px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 2px 8px var(--glow)}
-input[type=range]{width:100%;accent-color:var(--accent);margin:10px 0 0;cursor:pointer}
+.stk{position:absolute;left:12px;right:12px;bottom:14px;display:flex;gap:10px;align-items:center;background:rgba(20,18,26,.72);color:#fff;padding:9px 12px;border-radius:14px;backdrop-filter:blur(8px)}
+.stk .disc{width:38px;height:38px;font-size:1rem}.stk small{display:block;opacity:.75}
+.cb{position:absolute;top:12px;left:12px;background:rgba(20,18,26,.72);color:#fff;font-size:.8rem;font-weight:600;padding:4px 10px;border-radius:99px}
+.map{position:relative;height:26px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:6px}
+.map .hook{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--accent) 35%,transparent)}
+.map .win{position:absolute;top:2px;bottom:2px;border-radius:7px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+input[type=range]{width:100%;accent-color:var(--accent);margin:8px 0 0}
 .rt{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted)}.rt b{color:var(--fg)}
-
-.lst{width:100%;max-height:240px;overflow:auto;display:flex;flex-direction:column;gap:6px;margin-top:8px;padding-right:4px}
-.lst::-webkit-scrollbar{width:6px}
-.lst::-webkit-scrollbar-thumb{background:var(--line);border-radius:9px}
-.lst button{text-align:left;font-weight:600;font-size:.88rem;padding:9px 14px}
-.lst button.cur{border-color:var(--accent);background:var(--glow)}
-.lst small{color:var(--muted);font-weight:400}
-
-.h{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:18px 0 6px;font-weight:800}
-.sc{display:flex;align-items:center;gap:10px;font-size:.85rem;margin:6px 0}.sc span{width:130px;color:var(--muted);font-weight:500}.sc .meter{flex:1;margin:0}.sc b{width:24px;text-align:right;font-weight:700}
-select#lg{font:inherit;font-weight:600;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--fg);outline:none;width:100%;cursor:pointer}
+.lst{width:100%;max-height:250px;overflow:auto;display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.lst button{text-align:left;font-weight:500;font-size:.9rem;padding:8px 12px}
+.lst button.cur{border-color:var(--accent)}.lst small{color:var(--muted)}
+.h{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 4px;font-weight:700}
+.sc{display:flex;align-items:center;gap:8px;font-size:.85rem;margin:5px 0}.sc span{width:128px;color:var(--muted)}.sc .meter{flex:1;margin:0}.sc b{width:22px;text-align:right}
+select#lg{font:inherit;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+#ytw { display: none !important; }
 </style>
 </head>
 <body>
@@ -101,7 +62,7 @@ select#lg{font:inherit;font-weight:600;padding:10px 14px;border-radius:12px;bord
 <p class="sub">Drop a pic. Get the song that makes your story look like you have a whole personality.</p>
 
 <img id="prev" alt="Your photo preview">
-<label class="drop" id="drop" for="file"><b>Tap to add your photo</b><small>or drag it in here — it stays securely in your browser</small></label>
+<label class="drop" id="drop" for="file"><b>Tap to add your photo</b><small>or drag it in here — it stays in your browser</small></label>
 <input type="file" id="file" accept="image/*">
 
 <div id="res" class="card hide">
@@ -110,36 +71,28 @@ select#lg{font:inherit;font-weight:600;padding:10px 14px;border-radius:12px;bord
   <p class="cap" id="vcap"></p>
   <div class="song"><div class="disc">♪</div><div><h3 id="st"></h3><p id="sa"></p></div></div>
   <div class="h">Photo report</div><div id="rep"></div>
-  <div class="h">Song language</div>
-  <select id="lg"><option value="">Any language</option><option value="hindi">Hindi</option><option value="punjabi">Punjabi</option><option value="tamil">Tamil</option><option value="telugu">Telugu</option><option value="malayalam">Malayalam</option><option value="english">English</option></select>
-  <div class="h">Pick your 15 seconds</div>
-  <div class="story"><img id="simg" alt="Your photo with the song sticker"><div class="cb" id="cb"></div><div class="stk"><div class="disc">♪</div><div><b id="stt"></b><small id="sta"></small></div></div></div>
-  <div class="map"><div class="hook" id="hk"></div><div class="win" id="wn"></div></div>
-  <input type="range" id="rg" min="0" max="100" value="0" aria-label="Clip start time">
-  <div class="rt"><span>0:00</span><b id="rc"></b><span id="r1"></span></div>
-  <div class="alt" id="pre"></div>
-  <p class="tip" id="ins"></p>
-  <div class="meter"><i id="lm"></i></div>
+<div class="h">Song language</div><select id="lg"><option value="">Any language</option><option value="hindi">Hindi</option><option value="punjabi">Punjabi</option><option value="tamil">Tamil</option><option value="telugu">Telugu</option><option value="malayalam">Malayalam</option><option value="english">English</option></select>
+<div class="h">Pick your 15 seconds</div>
+<div class="story"><img id="simg" alt="Your photo with the song sticker"><div class="cb" id="cb"></div><div class="stk"><div class="disc">♪</div><div><b id="stt"></b><small id="sta"></small></div></div></div>
+<div class="map"><div class="hook" id="hk"></div><div class="win" id="wn"></div></div>
+<input type="range" id="rg" min="0" max="100" value="0" aria-label="Clip start time">
+<div class="rt"><span>0:00</span><b id="rc"></b><span id="r1"></span></div>
+<div class="alt" id="pre"></div>
+<p class="tip" id="ins"></p>
+<div class="meter"><i id="lm"></i></div>
   <div class="tip" id="lt"></div>
   <div class="row">
     <a class="btn pri" id="sp" target="_blank" rel="noopener">Open on Spotify</a>
     <a class="btn" id="yt" target="_blank" rel="noopener">YouTube</a>
     <button id="cp">Copy name</button><button id="pv">▶ Preview</button><button id="mk">Share card</button>
   </div>
-  <p class="tip hide" id="pvm"></p>
-  <div class="row" style="margin-top:12px">
-    <input id="yl" placeholder="Paste YouTube link for live audio" style="flex:1;min-width:0;font:inherit;padding:11px 14px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--fg);outline:none">
-    <button id="yg">Load</button>
-  </div>
-  <div id="ytw" class="hide" style="margin-top:10px;aspect-ratio:16/9"><div id="ytp"></div></div>
-  <audio id="au"></audio>
-  <img id="cardimg" class="hide" alt="Your share card" style="width:100%;border-radius:20px;margin-top:14px;box-shadow:0 12px 30px rgba(0,0,0,0.15)">
-  <div class="alt" id="alt"></div>
+  <p class="tip hide" id="pvm"></p><div class="row" style="margin-top:10px"><input id="yl" placeholder="Paste this song’s YouTube link to hear your exact clip live" style="flex:1;min-width:0;font:inherit;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--fg)"><button id="yg">Load</button></div><div id="ytw" class="hide" style="margin-top:10px;aspect-ratio:16/9"><div id="ytp"></div></div><audio id="au"></audio><img id="cardimg" class="hide" alt="Your share card" style="width:100%;border-radius:14px;margin-top:12px"><div class="alt" id="alt"></div>
   <p class="tip">To use it: open Instagram, Snapchat or WhatsApp status, tap the music sticker, and search the song name. Pick the 15 seconds that hit hardest.</p>
 </div>
-<p class="tip hide" id="busy" style="text-align:center;font-weight:600;margin-top:20px">Reading the vibes…</p>
+<p class="tip hide" id="busy">Reading the vibes…</p>
 </main>
 <script>
+// Song bank: tracks that show up in current Reels/Stories trend roundups, plus desi classics.
 const V={
 night:{n:"Main Character, 2 AM",c:["driving alone like the city owes me a soundtrack","neon, rain, zero explanations"],s:[["Nightcall","Kavinsky"],["Blinding Lights","The Weeknd"],["Saturn","SZA"]]},
 golden:{n:"Golden Hour Glow",c:["the sun did half the work here","soft light, warm heart, no notes"],s:[["Kiss of Life","Sade"],["September","Earth, Wind & Fire"],["Oh Yeah","Steve Lacy"]]},
@@ -180,6 +133,21 @@ async function aiVibe(img){
   }catch(e){return null}
 }
 
+function show(){
+  const v=V[vibe],s=v.s[idx%v.s.length],q=encodeURIComponent(s[0]+" "+s[1]);
+  $("vtag").textContent="your vibe";$("vname").textContent=v.n;
+  $("vcap").textContent=cur.cap||v.c[seed%v.c.length];
+  $("st").textContent=s[0];$("sa").textContent=s[1];
+  $("sp").href="https://open.spotify.com/search/"+q;
+  $("yt").href="https://www.youtube.com/results?search_query="+q;
+  const lv=62+((seed*13+idx*17)%37);
+  $("lm").style.width="0";setTimeout(()=>$("lm").style.width=lv+"%",30);
+  $("lt").textContent="Larp level: "+lv+"% — "+(lv>85?"fully believable, go post it":lv>72?"pulls it off":"needs a mysterious caption");
+  $("alt").innerHTML="";
+  v.s.forEach((t,i)=>{const b=document.createElement("button");b.textContent=t[0];if(i===idx%v.s.length)b.className="cur";
+    b.onclick=()=>{idx=i;show()};$("alt").appendChild(b)});
+}
+
 async function handle(f){
   if(!f||!f.type.startsWith("image/"))return;
   const url=URL.createObjectURL(f),img=new Image();
@@ -203,6 +171,7 @@ $("cp").onclick=async()=>{const v=V[vibe],s=v.s[idx%v.s.length];
   setTimeout(()=>$("cp").textContent="Copy name",1500)};
 </script>
 <script>
+// Song bank v2: title~artist~length~hook start (m:ss, approximate). Built from 2026 Reels/Stories trend roundups + Indian Reels lists.
 (function(){
 const raw={
 night:`Nightcall~Kavinsky~4:18~1:10
@@ -327,7 +296,7 @@ Tauba Tauba~Karan Aujla~3:25~0:50
 Husn~Anuv Jain~3:23~0:50
 Jhol~Maanu & Annural Khalid~3:09~0:50
 Pasoori~Ali Sethi & Shae Gill~3:44~0:50
-Tera Ban Jaunga~Akhil Sachdeva & Tulsi Kumar~3:42~0:55
+Tera Ban Jaunga~Akhil Sachdeva & Tulsi Kumar~3:42~0:50
 Heeriye~Jasleen Royal & Arijit Singh~3:15~0:45
 Pehle Bhi Main~Vishal Mishra~4:03~0:55
 Choo Lo~The Local Train~4:35~0:55
@@ -416,6 +385,7 @@ $("yg").onclick=async()=>{const m=$("pvm"),id=ytId($("yl").value);m.classList.re
     m.textContent="Live: drag the slider or tap a preset and it jumps there and loops your "+win+"s clip.";
   }catch(e){m.textContent="Couldn’t load the YouTube player from this page ("+(e&&e.message||e)+")."}};
 $("rg").oninput=e=>clip(+e.target.value);
+// ---- v3: AI photo report + live songs (needs the Worker: paste its URL below) ----
 const API='https://larp-api.anaghpandey13.workers.dev',ON=/^https?:/.test(API);
 const R={lighting:'Lighting',composition:'Composition',posture:'Posture & pose',angle:'Camera angle',expression:'Expression',color:'Color harmony',depth:'Depth & background',exposure:'Exposure & clarity'};
 const PROMPT='You are judging a photo for a music-matching app. Score each 0-10, honestly, not flatteringly: lighting; composition (thirds, balance, leading lines, framing); posture (body pose and posture of any person, else the subject’s stance); angle (camera angle and distance); expression (mood in face or body language, if visible); color (harmony, palette); depth (subject separation, background blur, clutter); exposure (brightness, sharpness, noise). Also give valence (0 dark/sad to 1 bright/happy), arousal (0 calm to 1 energetic), the closest vibe key from: KEYS, 3 to 5 mood tags chosen only from: chill, dreamy, romantic, nostalgic, melancholy, dark, night, summer, sunny, energetic, party, confident, cinematic, travel, cozy, indie, soulful, happy, sad, aesthetic; a funny lowercase caption of at most 10 words about the vibe; best (one sentence on what works) and fix (one sentence, one concrete way to improve the shot). Never guess anyone’s ethnicity, nationality, religion, age or identity. Reply with JSON only: {"valence":0,"arousal":0,"vibe":"","tags":[],"caption":"","best":"","fix":"","scores":{"lighting":0,"composition":0,"posture":0,"angle":0,"expression":0,"color":0,"depth":0,"exposure":0}}';
@@ -468,9 +438,9 @@ $("mk").onclick=async()=>{
   const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),im=$("prev"),w=im.naturalWidth,h=im.naturalHeight,r=Math.max(1080/w,1350/h);
   x.drawImage(im,(1080-w*r)/2,(1350-h*r)/2,w*r,h*r);
   const g=x.createLinearGradient(0,750,0,1350);g.addColorStop(0,"rgba(0,0,0,0)");g.addColorStop(1,"rgba(0,0,0,.8)");x.fillStyle=g;x.fillRect(0,750,1080,600);
-  const v=V[vibe],s=v.s[idx%v.s.length],f='"Plus Jakarta Sans",system-ui,sans-serif';
+  const v=V[vibe],s=v.s[idx%v.s.length],f='"DM Sans",system-ui,sans-serif';
   x.fillStyle="rgba(20,18,26,.78)";x.beginPath();x.moveTo(90,1030);x.arcTo(990,1030,990,1190,44);x.arcTo(990,1190,90,1190,44);x.arcTo(90,1190,90,1030,44);x.arcTo(90,1030,990,1030,44);x.fill();
-  const d=x.createLinearGradient(110,0,190,0);d.addColorStop(0,"#ff2a6d");d.addColorStop(1,"#7000ff");x.fillStyle=d;x.beginPath();x.arc(160,1110,42,0,7);x.fill();
+  const d=x.createLinearGradient(110,0,190,0);d.addColorStop(0,"#ff4f81");d.addColorStop(1,"#7a5cff");x.fillStyle=d;x.beginPath();x.arc(160,1110,42,0,7);x.fill();
   x.fillStyle="#fff";x.font="bold 40px "+f;x.textBaseline="middle";x.fillText("♪",147,1112);
   x.font="bold 46px "+f;x.fillText(s[0].slice(0,26),230,1088);x.font="32px "+f;x.globalAlpha=.75;x.fillText(s[1].slice(0,34),230,1140);x.globalAlpha=1;
   x.font="bold 34px "+f;x.fillText(v.n+"  ·  "+F(t0)+" – "+F(t0+win),90,1250);
