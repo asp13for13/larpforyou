@@ -322,4 +322,164 @@ Tum Hi Ho~Arijit Singh~4:22~0:55
 Maan Meri Jaan~King~3:12~0:45
 Excuses~AP Dhillon~2:57~0:45
 Brown Munde~AP Dhillon~4:27~0:50
-Softly
+Softly~Karan Aujla~2:52~0:50
+Tauba Tauba~Karan Aujla~3:25~0:50
+Husn~Anuv Jain~3:23~0:50
+Jhol~Maanu & Annural Khalid~3:09~0:50
+Pasoori~Ali Sethi & Shae Gill~3:44~0:50
+Tera Ban Jaunga~Akhil Sachdeva & Tulsi Kumar~3:42~0:55
+Heeriye~Jasleen Royal & Arijit Singh~3:15~0:45
+Pehle Bhi Main~Vishal Mishra~4:03~0:55
+Choo Lo~The Local Train~4:35~0:55
+Kahani Suno 2.0~Kaifi Khalil~3:20~0:45
+Chaand Baaliyan~Aditya A~3:00~0:40`,
+south:`Oo Antava~Indravathi Chauhan~3:45~0:50
+Srivalli~Sid Sriram~3:43~0:50
+Kaavaalaa~Shilpa Rao~3:17~0:45
+Hukum~Anirudh Ravichander~3:30~0:50
+Rowdy Baby~Dhanush & Dhee~4:47~0:55
+Why This Kolaveri Di~Dhanush~4:10~0:50
+Arabic Kuthu~Anirudh & Jonita Gandhi~4:00~0:50
+Vaathi Coming~Anirudh Ravichander~3:40~0:45
+Naatu Naatu~Rahul Sipligunj & Kaala Bhairava~3:35~0:55
+Butta Bomma~Armaan Malik~3:30~0:45
+Ramuloo Ramulaa~Anurag Kulkarni & Mangli~4:00~0:55
+Illuminati~Dabzee & Sushin Shyam~3:15~0:45
+Pavazha Malli~Sai Abhyankkar~3:00~0:45
+Aasa Kooda~Sai Abhyankkar~3:05~0:45`,
+punjabi:`Lover~Diljit Dosanjh~3:15~0:45
+Born to Shine~Diljit Dosanjh~3:20~0:50
+G.O.A.T.~Diljit Dosanjh~3:25~0:50
+Do You Know~Diljit Dosanjh~3:20~0:45
+295~Sidhu Moose Wala~4:30~1:00
+So High~Sidhu Moose Wala~3:25~0:50
+Qismat~Ammy Virk~4:15~0:55
+Filhall~B Praak~4:40~0:55
+Admirin’ You~Karan Aujla~3:00~0:45
+With You~AP Dhillon~3:40~0:55
+Insane~AP Dhillon~3:25~0:50
+Summer High~AP Dhillon~3:10~0:45
+Jaani Tera Naa~Sunanda Sharma~3:10~0:40
+Sundar Mundriye~Traditional folk~3:00~0:30`};
+const T=s=>{const p=s.split(":");return +p[0]*60+ +p[1]};
+const F=t=>Math.floor(t/60)+":"+String(Math.floor(t%60)).padStart(2,"0");
+V.desi={n:"Desi Main Character",c:["bollywood background score, my life, my rules","romance arc loading, zero plot armour"],s:[]};
+V.south={n:"South Indian Swag",c:["mass entry, background score included","the BGM follows me, not the other way round"],s:[]};
+V.punjabi={n:"Punjabi Swag",c:["main character with a dhol in the background","shades on, volume up, no further questions"],s:[]};
+Object.keys(raw).forEach(k=>{V[k].s=raw[k].split("\n").map(l=>{const p=l.split("~");return[p[0],p[1],T(p[2]),T(p[3])]})});
+let win=15,t0=0;
+function clip(t){const s=V[vibe].s[idx%V[vibe].s.length],d=s[2];
+  t0=Math.max(0,Math.min(t,d-win));
+  $("rg").max=Math.max(0,d-win);$("rg").value=t0;
+  $("wn").style.left=(t0/d*100)+"%";$("wn").style.width=(win/d*100)+"%";
+  $("rc").textContent=F(t0)+" → "+F(t0+win)+" · "+win+"s";
+  $("cb").textContent=F(t0)+" – "+F(t0+win);
+  $("ins").textContent="In Instagram: tap the music sticker, search “"+s[0]+"”, drag the waveform until the clip starts at about "+F(t0)+", and set the length to "+win+"s.";}
+show=function(){
+  const v=V[vibe],L=v.s,s=L[idx%L.length],q=encodeURIComponent(s[0]+" "+s[1]);
+  $("vtag").textContent="your vibe";$("vname").textContent=v.n;
+  $("vcap").textContent=cur.cap||v.c[seed%v.c.length];
+  $("st").textContent=s[0];$("sa").textContent=s[1];
+  $("stt").textContent=s[0];$("sta").textContent=s[1];$("simg").src=$("prev").src;
+  $("sp").href="https://open.spotify.com/search/"+q;$("yt").href="https://www.youtube.com/results?search_query="+q;
+  $("r1").textContent=F(s[2]);
+  $("hk").style.left=(s[3]/s[2]*100)+"%";$("hk").style.width=(Math.min(30,s[2]-s[3])/s[2]*100)+"%";
+  const pr=[["Chorus hit",s[3]],["Build-up",s[3]-8],["Intro mood",0],["Final chorus",s[2]*.72]];
+  $("pre").innerHTML="";
+  pr.forEach(p=>{const b=document.createElement("button");b.textContent=p[0];b.onclick=()=>clip(p[1]);$("pre").appendChild(b)});
+  [5,10,15].forEach(n=>{const b=document.createElement("button");b.textContent=n+"s";if(n===win)b.className="cur";
+    b.onclick=()=>{win=n;show()};$("pre").appendChild(b)});
+  clip(Math.max(0,s[3]-(win<15?0:0)));
+  const lv=62+((seed*13+idx*17)%37);
+  $("lm").style.width="0";setTimeout(()=>$("lm").style.width=lv+"%",30);
+  $("lt").textContent="Larp level: "+lv+"% — "+(lv>85?"fully believable, go post it":lv>72?"pulls it off":"needs a mysterious caption");
+  const A=$("alt");A.innerHTML="";
+  Object.keys(V).forEach(k=>{const b=document.createElement("button");b.textContent=V[k].n;if(k===vibe)b.className="cur";
+    b.onclick=()=>{vibe=k;idx=0;show()};A.appendChild(b)});
+  const ls=document.createElement("div");ls.className="lst";
+  L.forEach((t,i)=>{const b=document.createElement("button");b.innerHTML="";b.append(t[0]+" ");const m=document.createElement("small");m.textContent="· "+t[1];b.appendChild(m);
+    if(i===idx%L.length)b.className="cur";b.onclick=()=>{idx=i;show()};ls.appendChild(b)});
+  A.appendChild(ls);
+};
+let yp=null,live=false,ysong="",tk=0,db=0;
+const _c=clip;clip=function(t){_c(t);seek()};
+function curSong(){const L=V[vibe].s;return L[idx%L.length][0]}
+function seek(){if(!live||!yp||!yp.seekTo||curSong()!==ysong)return;clearTimeout(db);db=setTimeout(()=>{yp.seekTo(t0,true);yp.playVideo()},180)}
+function ytId(u){const m=u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);return m&&m[1]}
+function loadYT(){return new Promise((ok,no)=>{if(window.YT&&YT.Player)return ok();const s=document.createElement("script");s.src="https://www.youtube.com/iframe_api";s.onerror=()=>no(new Error("blocked or offline"));window.onYouTubeIframeAPIReady=ok;document.head.appendChild(s);setTimeout(()=>no(new Error("timed out")),8000)})}
+$("yg").onclick=async()=>{const m=$("pvm"),id=ytId($("yl").value);m.classList.remove("hide");
+  if(!id){m.textContent="That doesn’t look like a YouTube link. Tap the YouTube button above, open the song, and copy its address.";return}
+  try{await loadYT();$("ytw").classList.remove("hide");ysong=curSong();
+    if(yp&&yp.loadVideoById)yp.loadVideoById({videoId:id,startSeconds:t0});
+    else yp=new YT.Player("ytp",{width:"100%",height:"100%",videoId:id,playerVars:{start:Math.floor(t0),playsinline:1},events:{onReady:e=>{e.target.seekTo(t0,true);e.target.playVideo()}}});
+    live=true;clearInterval(tk);tk=setInterval(()=>{try{if(yp.getCurrentTime()>=t0+win)yp.seekTo(t0,true)}catch(e){}},300);
+    m.textContent="Live: drag the slider or tap a preset and it jumps there and loops your "+win+"s clip.";
+  }catch(e){m.textContent="Couldn’t load the YouTube player from this page ("+(e&&e.message||e)+")."}};
+$("rg").oninput=e=>clip(+e.target.value);
+const API='https://larp-api.anaghpandey13.workers.dev',ON=/^https?:/.test(API);
+const R={lighting:'Lighting',composition:'Composition',posture:'Posture & pose',angle:'Camera angle',expression:'Expression',color:'Color harmony',depth:'Depth & background',exposure:'Exposure & clarity'};
+const PROMPT='You are judging a photo for a music-matching app. Score each 0-10, honestly, not flatteringly: lighting; composition (thirds, balance, leading lines, framing); posture (body pose and posture of any person, else the subject’s stance); angle (camera angle and distance); expression (mood in face or body language, if visible); color (harmony, palette); depth (subject separation, background blur, clutter); exposure (brightness, sharpness, noise). Also give valence (0 dark/sad to 1 bright/happy), arousal (0 calm to 1 energetic), the closest vibe key from: KEYS, 3 to 5 mood tags chosen only from: chill, dreamy, romantic, nostalgic, melancholy, dark, night, summer, sunny, energetic, party, confident, cinematic, travel, cozy, indie, soulful, happy, sad, aesthetic; a funny lowercase caption of at most 10 words about the vibe; best (one sentence on what works) and fix (one sentence, one concrete way to improve the shot). Never guess anyone’s ethnicity, nationality, religion, age or identity. Reply with JSON only: {"valence":0,"arousal":0,"vibe":"","tags":[],"caption":"","best":"","fix":"","scores":{"lighting":0,"composition":0,"posture":0,"angle":0,"expression":0,"color":0,"depth":0,"exposure":0}}';
+function b2b(b){const a=atob(b),u=new Uint8Array(a.length);for(let i=0;i<a.length;i++)u[i]=a.charCodeAt(i);return new Blob([u],{type:'image/jpeg'})}
+function toB64(img){const c=document.createElement('canvas'),k=Math.min(1,768/Math.max(img.width,img.height));c.width=img.width*k;c.height=img.height*k;c.getContext('2d').drawImage(img,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.82).split(',')[1]}
+const vkeys=()=>Object.keys(V).filter(k=>k!=='live');
+async function judge(img){const b=toB64(img);
+  try{if(ON){const r=await fetch(API+'/judge',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({image:b,keys:vkeys()})});if(r.ok){const j=await r.json();if(j&&V[j.vibe])return j}}}catch(e){}
+  try{if(window.claude&&claude.use){const s=await claude.use('sample');if(s){const l=await s.limits();if(l&&l.images){const j=await s.json(PROMPT.replace('KEYS',vkeys().join(', ')),{images:[b2b(b)],modelTier:'quick'});if(j&&V[j.vibe])return j}}}}catch(e){}
+  return null}
+aiVibe=async function(img){const j=await judge(img);if(j)cur.j=j;return j};
+function rep(){const j=cur&&cur.j,b=$('rep');if(!j){b.innerHTML='';return}
+  let h='';Object.keys(R).forEach(k=>{const v=Math.max(0,Math.min(10,Math.round(+((j.scores||{})[k])||0)));h+='<div class="sc"><span>'+R[k]+'</span><div class="meter"><i style="width:'+v*10+'%"></i></div><b>'+v+'</b></div>'});
+  b.innerHTML=h;const p=(t,x)=>{const e=document.createElement('p');e.className='tip';e.textContent=t+x;b.appendChild(e)};
+  if(j.best)p('Works: ',j.best);if(j.fix)p('Try: ',j.fix);
+  if(j.valence!=null)p('Mood read: ',Math.round(j.valence*100)+'% positive, '+Math.round((j.arousal||0)*100)+'% energy')}
+async function loadLive(){const j=cur.j||{tags:TG[vibe]||['chill']};if(!ON)return;
+  try{const q='tags='+encodeURIComponent((j.tags||[]).slice(0,2).join(','))+'&lang='+encodeURIComponent($('lg').value)+'&country=India';
+    const d=await (await fetch(API+'/songs?'+q)).json();if(!d.songs||!d.songs.length)return;
+    V.live={n:'Live picks for your photo',c:['fresh from the charts, matched to your frame','picked from what people are playing right now'],s:d.songs.map(t=>[t.title,t.artist,210,63,1])};
+    vibe='live';idx=0;show()}catch(e){}}
+const vc={};let auto=false;const TG={night:['night','dark'],golden:['sunny','summer'],moody:['melancholy','sad'],fresh:['happy','chill'],hype:['party','energetic'],retro:['nostalgic','soulful'],desi:['romantic','soulful'],south:['energetic','party'],punjabi:['party','confident']};
+function fix(){const L=V[vibe].s,s=L[idx%L.length];if(!s[4]||ysong!==s[0]||!yp||!yp.getDuration)return;const d=Math.round(yp.getDuration());if(d>30){s[2]=d;s[3]=Math.round(d*.3);s[4]=0;show()}}
+async function ytLoad(id,s){await loadYT();$('ytw').classList.remove('hide');ysong=s[0];
+  if(yp&&yp.loadVideoById)yp.loadVideoById({videoId:id,startSeconds:t0});
+  else yp=new YT.Player('ytp',{width:'100%',height:'100%',videoId:id,playerVars:{start:Math.floor(t0),playsinline:1},events:{onReady:e=>{e.target.seekTo(t0,true);e.target.playVideo()},onStateChange:e=>{if(e.data===1)fix()}}});
+  live=true;clearInterval(tk);tk=setInterval(()=>{try{if(yp.getCurrentTime()>=t0+win)yp.seekTo(t0,true)}catch(e){}},300)}
+async function autoYT(){const L=V[vibe].s,s=L[idx%L.length],m=$('pvm');if(ysong===s[0]&&live)return;
+  m.classList.remove('hide');m.textContent='Finding the song…';
+  try{const k=s[0]+'|'+s[1];let id=vc[k];
+    if(!id){const d=await (await fetch(API+'/resolve?title='+encodeURIComponent(s[0])+'&artist='+encodeURIComponent(s[1]))).json();id=d.videoId;if(id)vc[k]=id}
+    if(!id)throw new Error('no match');
+    if(curSong()!==s[0])return;
+    await ytLoad(id,s);m.textContent='Live: drag the slider or tap a preset and your clip plays from there, on a loop.'
+  }catch(e){m.textContent='Couldn’t load this song’s audio ('+(e&&e.message||e)+'). Use the Spotify or YouTube button instead.'}}
+const _sh=show;show=function(){_sh();rep();
+  if(ON){$('yl').parentNode.style.display='none';if(cur&&!cur.lv){cur.lv=1;loadLive()}if(auto)autoYT()}};
+$('lg').onchange=()=>{if(cur)cur.lv=0;show()};
+if(ON){document.querySelector('.drop small').textContent='or drag it in. With live mode on, your photo goes to an AI service to read the vibe and is not saved by this site.';
+  const pc=document.createElement('button');pc.textContent='▶ Play my clip';pc.className='pri';pc.onclick=()=>{auto=true;autoYT()};$('pv').before(pc)}
+function jsonp(u){return new Promise((ok,no)=>{const f="cb"+Date.now(),s=document.createElement("script"),t=setTimeout(()=>{cl();no(new Error("timed out"))},7000);
+  function cl(){clearTimeout(t);delete window[f];s.remove()}
+  window[f]=d=>{cl();ok(d)};s.onerror=()=>{cl();no(new Error("blocked or offline"))};s.src=u+"&callback="+f;document.head.appendChild(s)})}
+$("pv").onclick=async()=>{const s=V[vibe].s[idx%V[vibe].s.length],m=$("pvm");m.classList.remove("hide");m.textContent="Looking for a 30-second preview…";
+  try{const j=await jsonp("https://itunes.apple.com/search?media=music&entity=song&limit=1&country=IN&term="+encodeURIComponent(s[0]+" "+s[1]));
+    const u=j.results&&j.results[0]&&j.results[0].previewUrl;if(!u){m.textContent="Apple has no preview for this song. Try Spotify or YouTube.";return}
+    const a=$("au");a.src=u.replace("http://","https://");await a.play();m.textContent="Playing Apple’s 30-second preview of "+s[0]+".";
+  }catch(e){m.textContent=(e&&e.name==="NotAllowedError")?"Your browser blocked playback. Tap Preview again.":"Couldn’t reach Apple’s preview service from this page ("+(e&&e.message||e)+"). Use Spotify or YouTube instead."}};
+$("mk").onclick=async()=>{
+  const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),im=$("prev"),w=im.naturalWidth,h=im.naturalHeight,r=Math.max(1080/w,1350/h);
+  x.drawImage(im,(1080-w*r)/2,(1350-h*r)/2,w*r,h*r);
+  const g=x.createLinearGradient(0,750,0,1350);g.addColorStop(0,"rgba(0,0,0,0)");g.addColorStop(1,"rgba(0,0,0,.8)");x.fillStyle=g;x.fillRect(0,750,1080,600);
+  const v=V[vibe],s=v.s[idx%v.s.length],f='"Plus Jakarta Sans",system-ui,sans-serif';
+  x.fillStyle="rgba(20,18,26,.78)";x.beginPath();x.moveTo(90,1030);x.arcTo(990,1030,990,1190,44);x.arcTo(990,1190,90,1190,44);x.arcTo(90,1190,90,1030,44);x.arcTo(90,1030,990,1030,44);x.fill();
+  const d=x.createLinearGradient(110,0,190,0);d.addColorStop(0,"#ff2a6d");d.addColorStop(1,"#7000ff");x.fillStyle=d;x.beginPath();x.arc(160,1110,42,0,7);x.fill();
+  x.fillStyle="#fff";x.font="bold 40px "+f;x.textBaseline="middle";x.fillText("♪",147,1112);
+  x.font="bold 46px "+f;x.fillText(s[0].slice(0,26),230,1088);x.font="32px "+f;x.globalAlpha=.75;x.fillText(s[1].slice(0,34),230,1140);x.globalAlpha=1;
+  x.font="bold 34px "+f;x.fillText(v.n+"  ·  "+F(t0)+" – "+F(t0+win),90,1250);
+  x.font="28px "+f;x.globalAlpha=.7;x.fillText("made with larp my vibe",90,1300);x.globalAlpha=1;
+  const b=await new Promise(q=>c.toBlob(q,"image/png"));
+  $("cardimg").src=URL.createObjectURL(b);$("cardimg").classList.remove("hide");
+  try{const dl=window.claude&&claude.use?await claude.use("downloads"):null;if(dl)await dl.save({filename:"larp-my-vibe.png",data:b})}catch(e){}
+};
+})();
+</script>
+</body>
+</html>
