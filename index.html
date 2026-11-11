@@ -51,6 +51,8 @@ input[type=range]{width:100%;accent-color:var(--accent);margin:8px 0 0}
 .lst button{text-align:left;font-weight:500;font-size:.9rem;padding:8px 12px}
 .lst button.cur{border-color:var(--accent)}.lst small{color:var(--muted)}
 .h{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 4px;font-weight:700}
+.sc{display:flex;align-items:center;gap:8px;font-size:.85rem;margin:5px 0}.sc span{width:128px;color:var(--muted)}.sc .meter{flex:1;margin:0}.sc b{width:22px;text-align:right}
+select#lg{font:inherit;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
 </style>
 </head>
 <body>
@@ -67,7 +69,9 @@ input[type=range]{width:100%;accent-color:var(--accent);margin:8px 0 0}
   <div class="vibe" id="vname"></div>
   <p class="cap" id="vcap"></p>
   <div class="song"><div class="disc">♪</div><div><h3 id="st"></h3><p id="sa"></p></div></div>
-  <div class="h">Pick your 15 seconds</div>
+  <div class="h">Photo report</div><div id="rep"></div>
+<div class="h">Song language</div><select id="lg"><option value="">Any language</option><option value="hindi">Hindi</option><option value="punjabi">Punjabi</option><option value="tamil">Tamil</option><option value="telugu">Telugu</option><option value="malayalam">Malayalam</option><option value="english">English</option></select>
+<div class="h">Pick your 15 seconds</div>
 <div class="story"><img id="simg" alt="Your photo with the song sticker"><div class="cb" id="cb"></div><div class="stk"><div class="disc">♪</div><div><b id="stt"></b><small id="sta"></small></div></div></div>
 <div class="map"><div class="hook" id="hk"></div><div class="win" id="wn"></div></div>
 <input type="range" id="rg" min="0" max="100" value="0" aria-label="Clip start time">
@@ -81,7 +85,7 @@ input[type=range]{width:100%;accent-color:var(--accent);margin:8px 0 0}
     <a class="btn" id="yt" target="_blank" rel="noopener">YouTube</a>
     <button id="cp">Copy name</button><button id="pv">▶ Preview</button><button id="mk">Share card</button>
   </div>
-  <p class="tip hide" id="pvm"></p><audio id="au"></audio><img id="cardimg" class="hide" alt="Your share card" style="width:100%;border-radius:14px;margin-top:12px"><div class="alt" id="alt"></div>
+  <p class="tip hide" id="pvm"></p><div class="row" style="margin-top:10px"><input id="yl" placeholder="Paste this song’s YouTube link to hear your exact clip live" style="flex:1;min-width:0;font:inherit;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--fg)"><button id="yg">Load</button></div><div id="ytw" class="hide" style="margin-top:10px;aspect-ratio:16/9"><div id="ytp"></div></div><audio id="au"></audio><img id="cardimg" class="hide" alt="Your share card" style="width:100%;border-radius:14px;margin-top:12px"><div class="alt" id="alt"></div>
   <p class="tip">To use it: open Instagram, Snapchat or WhatsApp status, tap the music sticker, and search the song name. Pick the 15 seconds that hit hardest.</p>
 </div>
 <p class="tip hide" id="busy">Reading the vibes…</p>
@@ -365,12 +369,70 @@ show=function(){
     if(i===idx%L.length)b.className="cur";b.onclick=()=>{idx=i;show()};ls.appendChild(b)});
   A.appendChild(ls);
 };
+let yp=null,live=false,ysong="",tk=0,db=0;
+const _c=clip;clip=function(t){_c(t);seek()};
+function curSong(){const L=V[vibe].s;return L[idx%L.length][0]}
+function seek(){if(!live||!yp||!yp.seekTo||curSong()!==ysong)return;clearTimeout(db);db=setTimeout(()=>{yp.seekTo(t0,true);yp.playVideo()},180)}
+function ytId(u){const m=u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);return m&&m[1]}
+function loadYT(){return new Promise((ok,no)=>{if(window.YT&&YT.Player)return ok();const s=document.createElement("script");s.src="https://www.youtube.com/iframe_api";s.onerror=()=>no(new Error("blocked or offline"));window.onYouTubeIframeAPIReady=ok;document.head.appendChild(s);setTimeout(()=>no(new Error("timed out")),8000)})}
+$("yg").onclick=async()=>{const m=$("pvm"),id=ytId($("yl").value);m.classList.remove("hide");
+  if(!id){m.textContent="That doesn’t look like a YouTube link. Tap the YouTube button above, open the song, and copy its address.";return}
+  try{await loadYT();$("ytw").classList.remove("hide");ysong=curSong();
+    if(yp&&yp.loadVideoById)yp.loadVideoById({videoId:id,startSeconds:t0});
+    else yp=new YT.Player("ytp",{width:"100%",height:"100%",videoId:id,playerVars:{start:Math.floor(t0),playsinline:1},events:{onReady:e=>{e.target.seekTo(t0,true);e.target.playVideo()}}});
+    live=true;clearInterval(tk);tk=setInterval(()=>{try{if(yp.getCurrentTime()>=t0+win)yp.seekTo(t0,true)}catch(e){}},300);
+    m.textContent="Live: drag the slider or tap a preset and it jumps there and loops your "+win+"s clip.";
+  }catch(e){m.textContent="Couldn’t load the YouTube player from this page ("+(e&&e.message||e)+")."}};
 $("rg").oninput=e=>clip(+e.target.value);
+// ---- v3: AI photo report + live songs (needs the Worker: paste its URL below) ----
+const API='larp-api.anaghpandey13.workers.dev',ON=/^https?:/.test(API);
+const R={lighting:'Lighting',composition:'Composition',posture:'Posture & pose',angle:'Camera angle',expression:'Expression',color:'Color harmony',depth:'Depth & background',exposure:'Exposure & clarity'};
+const PROMPT='You are judging a photo for a music-matching app. Score each 0-10, honestly, not flatteringly: lighting; composition (thirds, balance, leading lines, framing); posture (body pose and posture of any person, else the subject’s stance); angle (camera angle and distance); expression (mood in face or body language, if visible); color (harmony, palette); depth (subject separation, background blur, clutter); exposure (brightness, sharpness, noise). Also give valence (0 dark/sad to 1 bright/happy), arousal (0 calm to 1 energetic), the closest vibe key from: KEYS, 3 to 5 mood tags chosen only from: chill, dreamy, romantic, nostalgic, melancholy, dark, night, summer, sunny, energetic, party, confident, cinematic, travel, cozy, indie, soulful, happy, sad, aesthetic; a funny lowercase caption of at most 10 words about the vibe; best (one sentence on what works) and fix (one sentence, one concrete way to improve the shot). Never guess anyone’s ethnicity, nationality, religion, age or identity. Reply with JSON only: {"valence":0,"arousal":0,"vibe":"","tags":[],"caption":"","best":"","fix":"","scores":{"lighting":0,"composition":0,"posture":0,"angle":0,"expression":0,"color":0,"depth":0,"exposure":0}}';
+function b2b(b){const a=atob(b),u=new Uint8Array(a.length);for(let i=0;i<a.length;i++)u[i]=a.charCodeAt(i);return new Blob([u],{type:'image/jpeg'})}
+function toB64(img){const c=document.createElement('canvas'),k=Math.min(1,768/Math.max(img.width,img.height));c.width=img.width*k;c.height=img.height*k;c.getContext('2d').drawImage(img,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.82).split(',')[1]}
+const vkeys=()=>Object.keys(V).filter(k=>k!=='live');
+async function judge(img){const b=toB64(img);
+  try{if(ON){const r=await fetch(API+'/judge',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({image:b,keys:vkeys()})});if(r.ok){const j=await r.json();if(j&&V[j.vibe])return j}}}catch(e){}
+  try{if(window.claude&&claude.use){const s=await claude.use('sample');if(s){const l=await s.limits();if(l&&l.images){const j=await s.json(PROMPT.replace('KEYS',vkeys().join(', ')),{images:[b2b(b)],modelTier:'quick'});if(j&&V[j.vibe])return j}}}}catch(e){}
+  return null}
+aiVibe=async function(img){const j=await judge(img);if(j)cur.j=j;return j};
+function rep(){const j=cur&&cur.j,b=$('rep');if(!j){b.innerHTML='';return}
+  let h='';Object.keys(R).forEach(k=>{const v=Math.max(0,Math.min(10,Math.round(+((j.scores||{})[k])||0)));h+='<div class="sc"><span>'+R[k]+'</span><div class="meter"><i style="width:'+v*10+'%"></i></div><b>'+v+'</b></div>'});
+  b.innerHTML=h;const p=(t,x)=>{const e=document.createElement('p');e.className='tip';e.textContent=t+x;b.appendChild(e)};
+  if(j.best)p('Works: ',j.best);if(j.fix)p('Try: ',j.fix);
+  if(j.valence!=null)p('Mood read: ',Math.round(j.valence*100)+'% positive, '+Math.round((j.arousal||0)*100)+'% energy')}
+async function loadLive(){const j=cur.j||{tags:TG[vibe]||['chill']};if(!ON)return;
+  try{const q='tags='+encodeURIComponent((j.tags||[]).slice(0,2).join(','))+'&lang='+encodeURIComponent($('lg').value)+'&country=India';
+    const d=await (await fetch(API+'/songs?'+q)).json();if(!d.songs||!d.songs.length)return;
+    V.live={n:'Live picks for your photo',c:['fresh from the charts, matched to your frame','picked from what people are playing right now'],s:d.songs.map(t=>[t.title,t.artist,210,63,1])};
+    vibe='live';idx=0;show()}catch(e){}}
+const vc={};let auto=false;const TG={night:['night','dark'],golden:['sunny','summer'],moody:['melancholy','sad'],fresh:['happy','chill'],hype:['party','energetic'],retro:['nostalgic','soulful'],desi:['romantic','soulful'],south:['energetic','party'],punjabi:['party','confident']};
+function fix(){const L=V[vibe].s,s=L[idx%L.length];if(!s[4]||ysong!==s[0]||!yp||!yp.getDuration)return;const d=Math.round(yp.getDuration());if(d>30){s[2]=d;s[3]=Math.round(d*.3);s[4]=0;show()}}
+async function ytLoad(id,s){await loadYT();$('ytw').classList.remove('hide');ysong=s[0];
+  if(yp&&yp.loadVideoById)yp.loadVideoById({videoId:id,startSeconds:t0});
+  else yp=new YT.Player('ytp',{width:'100%',height:'100%',videoId:id,playerVars:{start:Math.floor(t0),playsinline:1},events:{onReady:e=>{e.target.seekTo(t0,true);e.target.playVideo()},onStateChange:e=>{if(e.data===1)fix()}}});
+  live=true;clearInterval(tk);tk=setInterval(()=>{try{if(yp.getCurrentTime()>=t0+win)yp.seekTo(t0,true)}catch(e){}},300)}
+async function autoYT(){const L=V[vibe].s,s=L[idx%L.length],m=$('pvm');if(ysong===s[0]&&live)return;
+  m.classList.remove('hide');m.textContent='Finding the song…';
+  try{const k=s[0]+'|'+s[1];let id=vc[k];
+    if(!id){const d=await (await fetch(API+'/resolve?title='+encodeURIComponent(s[0])+'&artist='+encodeURIComponent(s[1]))).json();id=d.videoId;if(id)vc[k]=id}
+    if(!id)throw new Error('no match');
+    if(curSong()!==s[0])return;
+    await ytLoad(id,s);m.textContent='Live: drag the slider or tap a preset and your clip plays from there, on a loop.'
+  }catch(e){m.textContent='Couldn’t load this song’s audio ('+(e&&e.message||e)+'). Use the Spotify or YouTube button instead.'}}
+const _sh=show;show=function(){_sh();rep();
+  if(ON){$('yl').parentNode.style.display='none';if(cur&&!cur.lv){cur.lv=1;loadLive()}if(auto)autoYT()}};
+$('lg').onchange=()=>{if(cur)cur.lv=0;show()};
+if(ON){document.querySelector('.drop small').textContent='or drag it in. With live mode on, your photo goes to an AI service to read the vibe and is not saved by this site.';
+  const pc=document.createElement('button');pc.textContent='▶ Play my clip';pc.className='pri';pc.onclick=()=>{auto=true;autoYT()};$('pv').before(pc)}
+function jsonp(u){return new Promise((ok,no)=>{const f="cb"+Date.now(),s=document.createElement("script"),t=setTimeout(()=>{cl();no(new Error("timed out"))},7000);
+  function cl(){clearTimeout(t);delete window[f];s.remove()}
+  window[f]=d=>{cl();ok(d)};s.onerror=()=>{cl();no(new Error("blocked or offline"))};s.src=u+"&callback="+f;document.head.appendChild(s)})}
 $("pv").onclick=async()=>{const s=V[vibe].s[idx%V[vibe].s.length],m=$("pvm");m.classList.remove("hide");m.textContent="Looking for a 30-second preview…";
-  try{const r=await fetch("https://itunes.apple.com/search?media=music&entity=song&limit=1&country=IN&term="+encodeURIComponent(s[0]+" "+s[1]));
-    const j=await r.json(),u=j.results&&j.results[0]&&j.results[0].previewUrl;if(!u)throw 0;
-    const a=$("au");a.src=u;await a.play();m.textContent="Playing Apple’s 30-second preview of "+s[0]+".";
-  }catch(e){m.textContent="Previews can’t load inside Claude. Use the Spotify or YouTube button, or host this page on your own site to switch previews on."}};
+  try{const j=await jsonp("https://itunes.apple.com/search?media=music&entity=song&limit=1&country=IN&term="+encodeURIComponent(s[0]+" "+s[1]));
+    const u=j.results&&j.results[0]&&j.results[0].previewUrl;if(!u){m.textContent="Apple has no preview for this song. Try Spotify or YouTube.";return}
+    const a=$("au");a.src=u.replace("http://","https://");await a.play();m.textContent="Playing Apple’s 30-second preview of "+s[0]+".";
+  }catch(e){m.textContent=(e&&e.name==="NotAllowedError")?"Your browser blocked playback. Tap Preview again.":"Couldn’t reach Apple’s preview service from this page ("+(e&&e.message||e)+"). Use Spotify or YouTube instead."}};
 $("mk").onclick=async()=>{
   const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),im=$("prev"),w=im.naturalWidth,h=im.naturalHeight,r=Math.max(1080/w,1350/h);
   x.drawImage(im,(1080-w*r)/2,(1350-h*r)/2,w*r,h*r);
