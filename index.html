@@ -2,454 +2,290 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>larp my vibe — the song for your story</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>larp my vibe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:ital,wght@0,400;1,400;1,600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fbf7f2;--fg:#1c1a22;--muted:#6d6878;--card:#fff;--line:#e6dfd6;--accent:#ff4f81;--accent2:#7a5cff;--ok:#1f9d63;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f0d14;--fg:#f4f1fa;--muted:#a49fb3;--card:#1a1722;--line:#2c2838;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0f0d14;--fg:#f4f1fa;--muted:#a49fb3;--card:#1a1722;--line:#2c2838;color-scheme:dark}
-*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 "DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:520px;margin:0 auto;padding:28px 18px 48px}
-h1{font-size:2rem;line-height:1.1;margin:0 0 6px;letter-spacing:-.02em}
-h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:var(--muted);margin:0 0 22px}
-.drop{display:block;border:2px dashed var(--line);border-radius:20px;background:var(--card);padding:34px 18px;text-align:center;cursor:pointer;transition:.15s}
-.drop:hover,.drop.on{border-color:var(--accent)}
-.drop b{display:block;font-size:1.1rem}.drop small{color:var(--muted)}
-input[type=file]{display:none}
-#prev{display:none;width:100%;max-height:380px;object-fit:cover;border-radius:20px;margin-bottom:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:14px}
-.tag{display:inline-block;font-size:.78rem;padding:3px 10px;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:600}
-.vibe{font-size:1.35rem;font-weight:700;margin:8px 0 2px}
-.cap{color:var(--muted);margin:0 0 14px}
-.song{display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}
-.disc{flex:none;width:52px;height:52px;border-radius:50%;background:conic-gradient(var(--accent),var(--accent2),var(--accent));display:grid;place-items:center;color:#fff;font-size:1.3rem}
-.song h3{margin:0;font-size:1.05rem}.song p{margin:0;color:var(--muted);font-size:.9rem}
-.meter{height:8px;border-radius:9px;background:var(--line);overflow:hidden;margin:12px 0 4px}
-.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .8s}
-.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-button,a.btn{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:10px 14px;border-radius:12px;cursor:pointer;text-decoration:none}
-button.pri{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.tip{font-size:.85rem;color:var(--muted);margin-top:12px}
-.hide{display:none}
-.alt{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.alt button{font-weight:500;font-size:.85rem;padding:6px 10px}
-.alt button.cur{border-color:var(--accent);color:var(--accent)}
-.story{position:relative;aspect-ratio:9/12;max-height:420px;margin:0 auto 12px;border-radius:18px;overflow:hidden;background:#000}
-.story img{width:100%;height:100%;object-fit:cover}
-.stk{position:absolute;left:12px;right:12px;bottom:14px;display:flex;gap:10px;align-items:center;background:rgba(20,18,26,.72);color:#fff;padding:9px 12px;border-radius:14px;backdrop-filter:blur(8px)}
-.stk .disc{width:38px;height:38px;font-size:1rem}.stk small{display:block;opacity:.75}
-.cb{position:absolute;top:12px;left:12px;background:rgba(20,18,26,.72);color:#fff;font-size:.8rem;font-weight:600;padding:4px 10px;border-radius:99px}
-.map{position:relative;height:26px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:6px}
-.map .hook{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--accent) 35%,transparent)}
-.map .win{position:absolute;top:2px;bottom:2px;border-radius:7px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-input[type=range]{width:100%;accent-color:var(--accent);margin:8px 0 0}
-.rt{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted)}.rt b{color:var(--fg)}
-.lst{width:100%;max-height:250px;overflow:auto;display:flex;flex-direction:column;gap:6px;margin-top:4px}
-.lst button{text-align:left;font-weight:500;font-size:.9rem;padding:8px 12px}
-.lst button.cur{border-color:var(--accent)}.lst small{color:var(--muted)}
-.h{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 4px;font-weight:700}
-.sc{display:flex;align-items:center;gap:8px;font-size:.85rem;margin:5px 0}.sc span{width:128px;color:var(--muted)}.sc .meter{flex:1;margin:0}.sc b{width:22px;text-align:right}
-select#lg{font:inherit;padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
-#ytw { display: none !important; }
+:root{--bg:#1B2A6B;--bg2:#22348A;--paper:#EEF1F8;--sun:#FFC83D;--ink:#0E1535;--mute:#A9B4E0;--line:rgba(238,241,248,.22)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--paper);font:400 16px/1.5 "Archivo",system-ui,sans-serif}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.cond{font-stretch:62%;font-variation-settings:"wdth" 62;font-weight:900;letter-spacing:-.005em}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:24px clamp(16px,4vw,48px) 0;max-width:1180px;margin:0 auto}
+.mark{font-size:clamp(2.4rem,7vw,4rem);line-height:.85;margin:0}
+.tagline{margin:0;color:var(--mute);max-width:36ch}
+main{display:grid;gap:40px;padding:30px clamp(16px,4vw,48px) 72px;max-width:1180px;margin:0 auto}
+@media(min-width:880px){main{grid-template-columns:minmax(300px,400px) 1fr;gap:64px;align-items:start}#stage{position:sticky;top:20px}}
+.frame{position:relative;width:min(100%,400px);aspect-ratio:9/16;background:var(--paper);color:var(--ink);box-shadow:10px 10px 0 var(--sun);overflow:hidden;margin-bottom:22px}
+.drop{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;padding:24px;cursor:pointer}
+.drop .big{font-size:clamp(3.6rem,13vw,5rem);line-height:.86}
+.drop .sm{font-size:.95rem;max-width:24ch}
+.frame.on .drop{display:none}
+#photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.frame.on #photo,.frame.on .shade{display:block}
+.shade{display:none;position:absolute;inset:0;background:linear-gradient(to top,rgba(10,14,40,.88) 0%,rgba(10,14,40,.5) 32%,rgba(10,14,40,0) 58%)}
+#quote{position:absolute;left:22px;right:22px;bottom:22px;margin:0;color:#fff;display:none}
+.frame.on #quote{display:block}
+#quote p{margin:0 0 10px;font:italic 400 1.5rem/1.22 "Newsreader",Georgia,serif}
+#quote cite{font-style:normal;font-size:.82rem;color:var(--sun);font-weight:600}
+#sticker{position:absolute;left:16px;top:20px;background:var(--sun);color:var(--ink);padding:9px 14px;transform:rotate(-3deg);max-width:78%;display:none}
+#sticker b{display:block;font-weight:800;line-height:1.15}
+#sticker span{font-size:.82rem}
+.acts{display:flex;flex-wrap:wrap;gap:10px}
+.btn{border:2px solid var(--paper);background:none;padding:9px 14px;cursor:pointer;font-weight:600}
+.btn.pri{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:default}
+h2{margin:0 0 6px;font-size:clamp(2rem,5vw,3rem);line-height:.9}
+.lead{color:var(--mute);margin:0 0 24px;max-width:48ch}
+.row{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;margin-bottom:14px}
+.lab{color:var(--mute);font-size:.9rem;min-width:5.5rem}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:4px 0;cursor:pointer;font-weight:600}
+.tab[aria-pressed=true]{border-bottom-color:var(--sun)}
+select{background:var(--bg2);border:2px solid var(--line);padding:6px 10px}
+#list{list-style:none;margin:22px 0 0;padding:0;border-top:1px solid var(--line)}
+#list button{display:flex;width:100%;justify-content:space-between;gap:14px;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:11px 6px;cursor:pointer}
+#list button[aria-current=true]{background:var(--sun);color:var(--ink)}
+#list .t{font-weight:700}
+#list .a{font:italic 400 1rem "Newsreader",Georgia,serif;opacity:.85;text-align:right}
+#list .empty{padding:14px 6px;color:var(--mute)}
+#pl{display:none;margin-top:30px;padding:20px;background:var(--bg2);border-left:6px solid var(--sun)}
+#pl h3{margin:0;font-size:1.8rem;line-height:.95}
+#pl .by{font:italic 400 1.05rem "Newsreader",Georgia,serif;color:var(--mute);margin:2px 0 14px}
+#ytw{display:none;max-width:460px;aspect-ratio:16/9;margin:14px 0;background:#000}
+input[type=range]{width:100%;accent-color:var(--sun);margin:10px 0 2px}
+.rt{display:flex;justify-content:space-between;color:var(--mute);font-size:.88rem}
+.rt b{color:var(--paper)}
+.note{color:var(--mute);font-size:.9rem;margin:12px 0 0;max-width:56ch}
+#out{display:none;width:min(100%,260px);margin-top:14px}
 </style>
 </head>
 <body>
+<header>
+  <h1 class="mark cond">larp my vibe</h1>
+  <p class="tagline">Add a photo. Get a song almost nobody posts, and a line to go with it.</p>
+</header>
 <main>
-<h1>larp my <span>vibe</span></h1>
-<p class="sub">Drop a pic. Get the song that makes your story look like you have a whole personality.</p>
+  <section id="stage" aria-label="Your story">
+    <div class="frame" id="frame">
+      <label class="drop" for="file"><span class="big cond">Drop a photo</span><span class="sm">or tap to choose one. It never leaves your device.</span></label>
+      <img id="photo" alt="Your photo">
+      <div class="shade"></div>
+      <div id="sticker"><b id="stt"></b><span id="sta"></span></div>
+      <blockquote id="quote"><p id="qt"></p><cite id="qs"></cite></blockquote>
+    </div>
+    <input type="file" id="file" accept="image/*" hidden>
+    <div class="acts">
+      <button class="btn" id="chg">Change photo</button>
+      <button class="btn" id="nq" disabled>New line</button>
+      <button class="btn pri" id="sv" disabled>Save story</button>
+    </div>
+    <img id="out" alt="Your saved story">
+  </section>
 
-<img id="prev" alt="Your photo preview">
-<label class="drop" id="drop" for="file"><b>Tap to add your photo</b><small>or drag it in here — it stays in your browser</small></label>
-<input type="file" id="file" accept="image/*">
+  <section id="crate" aria-label="Songs">
+    <h2 class="cond">The crate</h2>
+    <p class="lead" id="lead">Pick a photo and the crate fills with songs that match its light. Go deeper to leave the hits behind.</p>
+    <div class="row"><span class="lab">Mood</span><span id="vibes"></span></div>
+    <div class="row"><span class="lab">How deep</span><span id="depth"></span></div>
+    <div class="row"><span class="lab">Language</span>
+      <select id="lang" aria-label="Song language">
+        <option value="">Any</option><option value="hindi">Hindi</option><option value="punjabi">Punjabi</option><option value="tamil">Tamil</option><option value="telugu">Telugu</option><option value="malayalam">Malayalam</option><option value="bengali">Bengali</option><option value="japanese">Japanese</option><option value="korean">Korean</option><option value="spanish">Spanish</option><option value="portuguese">Portuguese</option><option value="french">French</option><option value="arabic">Arabic</option><option value="turkish">Turkish</option><option value="italian">Italian</option><option value="instrumental">Instrumental</option>
+      </select>
+      <button class="btn" id="dig">Dig again</button>
+    </div>
+    <ul id="list"></ul>
 
-<div id="res" class="card hide">
-  <span class="tag" id="vtag">vibe</span>
-  <div class="vibe" id="vname"></div>
-  <p class="cap" id="vcap"></p>
-  <div class="song"><div class="disc">♪</div><div><h3 id="st"></h3><p id="sa"></p></div></div>
-  <div class="h">Photo report</div><div id="rep"></div>
-<div class="h">Song language</div><select id="lg"><option value="">Any language</option><option value="hindi">Hindi</option><option value="punjabi">Punjabi</option><option value="tamil">Tamil</option><option value="telugu">Telugu</option><option value="malayalam">Malayalam</option><option value="english">English</option></select>
-<div class="h">Pick your 15 seconds</div>
-<div class="story"><img id="simg" alt="Your photo with the song sticker"><div class="cb" id="cb"></div><div class="stk"><div class="disc">♪</div><div><b id="stt"></b><small id="sta"></small></div></div></div>
-<div class="map"><div class="hook" id="hk"></div><div class="win" id="wn"></div></div>
-<input type="range" id="rg" min="0" max="100" value="0" aria-label="Clip start time">
-<div class="rt"><span>0:00</span><b id="rc"></b><span id="r1"></span></div>
-<div class="alt" id="pre"></div>
-<p class="tip" id="ins"></p>
-<div class="meter"><i id="lm"></i></div>
-  <div class="tip" id="lt"></div>
-  <div class="row">
-    <a class="btn pri" id="sp" target="_blank" rel="noopener">Open on Spotify</a>
-    <a class="btn" id="yt" target="_blank" rel="noopener">YouTube</a>
-    <button id="cp">Copy name</button><button id="pv">▶ Preview</button><button id="mk">Share card</button>
-  </div>
-  <p class="tip hide" id="pvm"></p><div class="row" style="margin-top:10px"><input id="yl" placeholder="Paste this song’s YouTube link to hear your exact clip live" style="flex:1;min-width:0;font:inherit;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--fg)"><button id="yg">Load</button></div><div id="ytw" class="hide" style="margin-top:10px;aspect-ratio:16/9"><div id="ytp"></div></div><audio id="au"></audio><img id="cardimg" class="hide" alt="Your share card" style="width:100%;border-radius:14px;margin-top:12px"><div class="alt" id="alt"></div>
-  <p class="tip">To use it: open Instagram, Snapchat or WhatsApp status, tap the music sticker, and search the song name. Pick the 15 seconds that hit hardest.</p>
-</div>
-<p class="tip hide" id="busy">Reading the vibes…</p>
+    <div id="pl">
+      <h3 class="cond" id="pt"></h3>
+      <p class="by" id="pa"></p>
+      <div class="acts">
+        <button class="btn pri" id="play">Play my clip</button>
+        <a class="btn" id="yt" target="_blank" rel="noopener">Open on YouTube</a>
+        <a class="btn" id="sp" target="_blank" rel="noopener">Open on Spotify</a>
+      </div>
+      <div id="ytw"><div id="ytp"></div></div>
+      <div id="ctl" hidden>
+        <input type="range" id="rg" min="0" max="100" value="0" aria-label="Clip start">
+        <div class="rt"><span>0:00</span><b id="rc"></b><span id="re"></span></div>
+        <div class="row" style="margin-top:12px"><span class="lab">Jump to</span><span id="pre"></span></div>
+        <div class="row"><span class="lab">Length</span><span id="lens"></span></div>
+      </div>
+      <p class="note" id="msg"></p>
+    </div>
+  </section>
 </main>
+
 <script>
-// Song bank: tracks that show up in current Reels/Stories trend roundups, plus desi classics.
-const V={
-night:{n:"Main Character, 2 AM",c:["driving alone like the city owes me a soundtrack","neon, rain, zero explanations"],s:[["Nightcall","Kavinsky"],["Blinding Lights","The Weeknd"],["Saturn","SZA"]]},
-golden:{n:"Golden Hour Glow",c:["the sun did half the work here","soft light, warm heart, no notes"],s:[["Kiss of Life","Sade"],["September","Earth, Wind & Fire"],["Oh Yeah","Steve Lacy"]]},
-moody:{n:"Quiet and Complicated",c:["looking out the window like it owes me closure","deep thoughts, shallow battery"],s:[["Too Sweet","Hozier"],["Birds of a Feather","Billie Eilish"],["Saturn","SZA"]]},
-fresh:{n:"Clean, Bright, Unbothered",c:["iced coffee energy, zero stress on file","effortlessly put together (it took 40 tries)"],s:[["Espresso","Sabrina Carpenter"],["Lil Boo Thang","Paul Russell"],["Sunflower","Post Malone"]]},
-hype:{n:"Loud and Proud",c:["entering the room before I enter the room","the confidence is on loan but I’m never returning it"],s:[["Not Like Us","Kendrick Lamar"],["Nasty","Tinashe"],["Dai Dai","Shakira & Burna Boy"]]},
-retro:{n:"Retro Desi Nostalgia",c:["old film, old soul, new haircut","pretending it’s a 90s movie scene"],s:[["Kanmani Anbodu","Ilaiyaraaja"],["Tum Se Hi","Mohit Chauhan"],["Ilahi","Arijit Singh"],["Lag Ja Gale","Lata Mangeshkar"]]}
-};
-const $=id=>document.getElementById(id);
-let cur=null,idx=0,vibe="moody",seed=0;
-
-function analyze(img){
-  const c=document.createElement("canvas"),w=c.width=64,h=c.height=64,x=c.getContext("2d");
-  x.drawImage(img,0,0,w,h);const d=x.getImageData(0,0,w,h).data;
-  let R=0,G=0,B=0,S=0,L=[],n=d.length/4;
-  for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2];R+=r;G+=g;B+=b;
-    const mx=Math.max(r,g,b),mn=Math.min(r,g,b);S+=mx?(mx-mn)/mx:0;L.push((.299*r+.587*g+.114*b)/255)}
-  const lum=L.reduce((a,b)=>a+b,0)/n,sat=S/n,con=Math.sqrt(L.reduce((a,b)=>a+(b-lum)**2,0)/n),warm=(R-B)/n;
-  let v="moody";
-  if(lum<.3)v="night";else if(sat>.45&&con>.22)v="hype";else if(warm>25&&lum>.5)v="golden";
-  else if(sat<.25&&warm>10)v="retro";else if(lum>.55)v="fresh";
-  return{v,lum,sat,con,warm,seed:Math.floor((R+G*3+B*7)/n)};
-}
-
-async function aiVibe(img){
-  try{
-    if(!(window.claude&&claude.use))return null;
-    const s=await claude.use("sample");if(!s)return null;
-    const lim=await s.limits();if(!lim||!lim.images)return null;
-    const c=document.createElement("canvas"),k=Math.min(1,640/Math.max(img.width,img.height));
-    c.width=img.width*k;c.height=img.height*k;c.getContext("2d").drawImage(img,0,0,c.width,c.height);
-    const blob=await new Promise(r=>c.toBlob(r,"image/jpeg",.8));
-    const p="Look at this photo and pick the ONE best vibe key from: "+Object.keys(V).join(", ")+
-      ". night=dark/neon/city night, golden=warm sunlit, moody=muted/introspective, fresh=bright/clean/cafe/friends, hype=bold/party/flex, retro=vintage/old-film nostalgia, desi=modern Bollywood romantic or trendy, south=Tamil/Telugu/Malayalam mass or swagger, punjabi=Punjabi swag/party/road-trip. "+
-      "Reply with JSON only: {\"vibe\":key,\"caption\":\"max 10 words, funny, lowercase, about the vibe not the person\"}. Do not describe or identify anyone.";
-    const j=await s.json(p,{images:[blob],modelTier:"quick"});
-    return j&&V[j.vibe]?j:null;
-  }catch(e){return null}
-}
-
-function show(){
-  const v=V[vibe],s=v.s[idx%v.s.length],q=encodeURIComponent(s[0]+" "+s[1]);
-  $("vtag").textContent="your vibe";$("vname").textContent=v.n;
-  $("vcap").textContent=cur.cap||v.c[seed%v.c.length];
-  $("st").textContent=s[0];$("sa").textContent=s[1];
-  $("sp").href="https://open.spotify.com/search/"+q;
-  $("yt").href="https://www.youtube.com/results?search_query="+q;
-  const lv=62+((seed*13+idx*17)%37);
-  $("lm").style.width="0";setTimeout(()=>$("lm").style.width=lv+"%",30);
-  $("lt").textContent="Larp level: "+lv+"% — "+(lv>85?"fully believable, go post it":lv>72?"pulls it off":"needs a mysterious caption");
-  $("alt").innerHTML="";
-  v.s.forEach((t,i)=>{const b=document.createElement("button");b.textContent=t[0];if(i===idx%v.s.length)b.className="cur";
-    b.onclick=()=>{idx=i;show()};$("alt").appendChild(b)});
-}
-
-async function handle(f){
-  if(!f||!f.type.startsWith("image/"))return;
-  const url=URL.createObjectURL(f),img=new Image();
-  img.onload=async()=>{
-    $("prev").src=url;$("prev").style.display="block";$("res").classList.add("hide");$("busy").classList.remove("hide");
-    const a=analyze(img);seed=a.seed;idx=0;vibe=a.v;cur={};
-    const ai=await aiVibe(img);
-    if(ai){vibe=ai.vibe;cur.cap=ai.caption}
-    $("busy").classList.add("hide");$("res").classList.remove("hide");show();
-    $("drop").firstChild.textContent="Try another photo";
-  };
-  img.src=url;
-}
-$("file").onchange=e=>handle(e.target.files[0]);
-const dz=$("drop");
-["dragover","dragenter"].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.add("on")}));
-["dragleave","drop"].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.remove("on")}));
-dz.addEventListener("drop",e=>handle(e.dataTransfer.files[0]));
-$("cp").onclick=async()=>{const v=V[vibe],s=v.s[idx%v.s.length];
-  try{await navigator.clipboard.writeText(s[0]+" — "+s[1]);$("cp").textContent="Copied ✓"}catch(e){$("cp").textContent="Copy failed"}
-  setTimeout(()=>$("cp").textContent="Copy name",1500)};
-</script>
-<script>
-// Song bank v2: title~artist~length~hook start (m:ss, approximate). Built from 2026 Reels/Stories trend roundups + Indian Reels lists.
-(function(){
-const raw={
-night:`Nightcall~Kavinsky~4:18~1:10
-Blinding Lights~The Weeknd~3:20~0:54
-After Dark~Mr.Kitty~4:17~1:00
-Midnight City~M83~4:03~1:00
-The Less I Know the Better~Tame Impala~3:36~0:50
-Redbone~Childish Gambino~5:26~1:00
-Heat Waves~Glass Animals~3:58~0:55
-Sweater Weather~The Neighbourhood~4:00~0:55
-Nights~Frank Ocean~5:07~1:00
-Self Control~Frank Ocean~4:09~1:00
-Die For You~The Weeknd~4:20~1:00
-Save Your Tears~The Weeknd~3:35~0:55
-Starboy~The Weeknd~3:50~0:55
-Do I Wanna Know?~Arctic Monkeys~4:32~1:00
-505~Arctic Monkeys~4:13~1:10
-Pursuit of Happiness~Kid Cudi~4:53~1:00
-Sunset Lover~Petit Biscuit~3:57~0:55
-Telepatía~Kali Uchis~3:40~0:55
-Houdini~Dua Lipa~3:05~0:45`,
-golden:`Kiss of Life~Sade~4:10~1:00
-September~Earth, Wind & Fire~3:35~0:45
-Dreams~Fleetwood Mac~4:14~0:55
-Golden Hour~JVKE~3:29~0:50
-Golden~Harry Styles~3:28~0:50
-Watermelon Sugar~Harry Styles~2:54~0:45
-Here Comes the Sun~The Beatles~3:06~0:30
-Sunday Best~Surfaces~2:37~0:40
-Put Your Records On~Corinne Bailey Rae~3:35~0:50
-Island in the Sun~Weezer~3:20~0:50
-Good Days~SZA~4:39~1:00
-Electric Feel~MGMT~3:49~0:55
-Lover~Taylor Swift~3:41~0:55
-Cruel Summer~Taylor Swift~2:58~0:50
-Banana Pancakes~Jack Johnson~3:11~0:50
-Lovely Day~Bill Withers~4:15~0:45
-Valerie~Amy Winehouse~3:39~0:50
-Walking on Sunshine~Katrina & The Waves~3:58~0:40`,
-moody:`Too Sweet~Hozier~4:11~1:00
-Birds of a Feather~Billie Eilish~3:30~0:55
-Saturn~SZA~3:07~0:50
-Ocean Eyes~Billie Eilish~3:20~0:55
-Lovely~Billie Eilish & Khalid~3:20~0:55
-Someone Like You~Adele~4:45~1:25
-Skinny Love~Bon Iver~3:58~1:00
-Fade Into You~Mazzy Star~4:55~1:00
-Liability~Lorde~2:52~0:40
-Cardigan~Taylor Swift~3:59~1:00
-Video Games~Lana Del Rey~4:42~1:00
-Summertime Sadness~Lana Del Rey~4:25~0:55
-Young and Beautiful~Lana Del Rey~3:56~1:00
-Mad World~Gary Jules~3:07~0:50
-Creep~Radiohead~3:58~0:55
-Space Song~Beach House~5:20~1:20
-Another Love~Tom Odell~4:04~0:55
-Lose Control~Teddy Swims~3:30~0:55
-Beautiful Things~Benson Boone~3:00~0:50`,
-fresh:`Espresso~Sabrina Carpenter~2:55~0:45
-Please Please Please~Sabrina Carpenter~3:06~0:50
-Lil Boo Thang~Paul Russell~2:46~0:45
-Sunflower~Post Malone & Swae Lee~2:38~0:40
-Good as Hell~Lizzo~2:39~0:35
-Levitating~Dua Lipa~3:23~0:55
-Dance the Night~Dua Lipa~2:56~0:45
-Flowers~Miley Cyrus~3:21~0:50
-As It Was~Harry Styles~2:47~0:40
-Anti-Hero~Taylor Swift~3:21~0:50
-Shut Up and Dance~WALK THE MOON~3:19~0:50
-Dog Days Are Over~Florence + The Machine~4:12~1:00
-Three Little Birds~Bob Marley~3:00~0:40
-Best Day of My Life~American Authors~3:14~0:45
-Happy~Pharrell Williams~3:53~0:45
-Good 4 U~Olivia Rodrigo~2:58~0:50
-Sweet Disposition~The Temper Trap~3:52~1:00
-I’m Yours~Jason Mraz~4:02~0:55
-Love Story~Taylor Swift~3:55~1:00`,
-hype:`Not Like Us~Kendrick Lamar~4:34~1:05
-Nasty~Tinashe~3:00~0:45
-Dai Dai~Shakira & Burna Boy~3:00~0:50
-Million Dollar Baby~Tommy Richman~2:35~0:40
-Mr. Brightside~The Killers~3:42~0:55
-Industry Baby~Lil Nas X & Jack Harlow~3:32~0:50
-Stronger~Kanye West~5:11~1:00
-Lose Yourself~Eminem~5:26~1:10
-SICKO MODE~Travis Scott~5:12~1:10
-HUMBLE.~Kendrick Lamar~2:57~0:45
-Bad Guy~Billie Eilish~3:14~0:50
-Hips Don’t Lie~Shakira~3:38~0:55
-Waka Waka~Shakira~3:22~0:55
-Run the World (Girls)~Beyoncé~3:56~0:55
-Crazy in Love~Beyoncé~3:56~0:50
-Uptown Funk~Mark Ronson & Bruno Mars~4:30~0:50
-Believe~Imagine Dragons~3:24~0:55
-Don’t Start Now~Dua Lipa~3:03~0:45`,
-retro:`Kanmani Anbodu~Ilaiyaraaja~5:00~0:45
-Kiliye Kiliye~Ilaiyaraaja~4:30~0:45
-Tum Se Hi~Mohit Chauhan~5:23~1:00
-Ilahi~Arijit Singh~3:49~0:50
-Lag Ja Gale~Lata Mangeshkar~4:30~0:40
-Kabhi Kabhi Aditi~Rashid Ali~4:43~0:55
-Pal Pal Dil Ke Paas~Kishore Kumar~4:20~0:50
-Kal Ho Naa Ho~Sonu Nigam~5:20~1:00
-Tujh Mein Rab Dikhta Hai~Roop Kumar Rathod~5:40~1:00
-Agar Tum Saath Ho~Alka Yagnik & Arijit Singh~5:41~1:00
-Channa Mereya~Arijit Singh~4:49~1:00
-Kun Faya Kun~A.R. Rahman~7:53~1:10
-Namak Ishq Ka~Rekha Bhardwaj~4:46~0:55
-Ae Dil Hai Mushkil~Arijit Singh~4:29~0:55`,
-desi:`Jhoome Jo Pathaan~Arijit Singh~3:28~0:50
-Besharam Rang~Shilpa Rao~4:18~0:55
-Kesariya~Arijit Singh~4:28~0:55
-Ranjha~B Praak & Jasleen Royal~3:50~0:50
-Apna Bana Le~Arijit Singh~4:20~0:55
-Raataan Lambiyan~Jubin Nautiyal & Asees Kaur~3:50~0:55
-Tum Hi Ho~Arijit Singh~4:22~0:55
-Maan Meri Jaan~King~3:12~0:45
-Excuses~AP Dhillon~2:57~0:45
-Brown Munde~AP Dhillon~4:27~0:50
-Softly~Karan Aujla~2:52~0:50
-Tauba Tauba~Karan Aujla~3:25~0:50
-Husn~Anuv Jain~3:23~0:50
-Jhol~Maanu & Annural Khalid~3:09~0:50
-Pasoori~Ali Sethi & Shae Gill~3:44~0:50
-Tera Ban Jaunga~Akhil Sachdeva & Tulsi Kumar~3:42~0:50
-Heeriye~Jasleen Royal & Arijit Singh~3:15~0:45
-Pehle Bhi Main~Vishal Mishra~4:03~0:55
-Choo Lo~The Local Train~4:35~0:55
-Kahani Suno 2.0~Kaifi Khalil~3:20~0:45
-Chaand Baaliyan~Aditya A~3:00~0:40`,
-south:`Oo Antava~Indravathi Chauhan~3:45~0:50
-Srivalli~Sid Sriram~3:43~0:50
-Kaavaalaa~Shilpa Rao~3:17~0:45
-Hukum~Anirudh Ravichander~3:30~0:50
-Rowdy Baby~Dhanush & Dhee~4:47~0:55
-Why This Kolaveri Di~Dhanush~4:10~0:50
-Arabic Kuthu~Anirudh & Jonita Gandhi~4:00~0:50
-Vaathi Coming~Anirudh Ravichander~3:40~0:45
-Naatu Naatu~Rahul Sipligunj & Kaala Bhairava~3:35~0:55
-Butta Bomma~Armaan Malik~3:30~0:45
-Ramuloo Ramulaa~Anurag Kulkarni & Mangli~4:00~0:55
-Illuminati~Dabzee & Sushin Shyam~3:15~0:45
-Pavazha Malli~Sai Abhyankkar~3:00~0:45
-Aasa Kooda~Sai Abhyankkar~3:05~0:45`,
-punjabi:`Lover~Diljit Dosanjh~3:15~0:45
-Born to Shine~Diljit Dosanjh~3:20~0:50
-G.O.A.T.~Diljit Dosanjh~3:25~0:50
-Do You Know~Diljit Dosanjh~3:20~0:45
-295~Sidhu Moose Wala~4:30~1:00
-So High~Sidhu Moose Wala~3:25~0:50
-Qismat~Ammy Virk~4:15~0:55
-Filhall~B Praak~4:40~0:55
-Admirin’ You~Karan Aujla~3:00~0:45
-With You~AP Dhillon~3:40~0:55
-Insane~AP Dhillon~3:25~0:50
-Summer High~AP Dhillon~3:10~0:45
-Jaani Tera Naa~Sunanda Sharma~3:10~0:40
-Sundar Mundriye~Traditional folk~3:00~0:30`};
-const T=s=>{const p=s.split(":");return +p[0]*60+ +p[1]};
-const F=t=>Math.floor(t/60)+":"+String(Math.floor(t%60)).padStart(2,"0");
-V.desi={n:"Desi Main Character",c:["bollywood background score, my life, my rules","romance arc loading, zero plot armour"],s:[]};
-V.south={n:"South Indian Swag",c:["mass entry, background score included","the BGM follows me, not the other way round"],s:[]};
-V.punjabi={n:"Punjabi Swag",c:["main character with a dhol in the background","shades on, volume up, no further questions"],s:[]};
-Object.keys(raw).forEach(k=>{V[k].s=raw[k].split("\n").map(l=>{const p=l.split("~");return[p[0],p[1],T(p[2]),T(p[3])]})});
-let win=15,t0=0;
-function clip(t){const s=V[vibe].s[idx%V[vibe].s.length],d=s[2];
-  t0=Math.max(0,Math.min(t,d-win));
-  $("rg").max=Math.max(0,d-win);$("rg").value=t0;
-  $("wn").style.left=(t0/d*100)+"%";$("wn").style.width=(win/d*100)+"%";
-  $("rc").textContent=F(t0)+" → "+F(t0+win)+" · "+win+"s";
-  $("cb").textContent=F(t0)+" – "+F(t0+win);
-  $("ins").textContent="In Instagram: tap the music sticker, search “"+s[0]+"”, drag the waveform until the clip starts at about "+F(t0)+", and set the length to "+win+"s.";}
-show=function(){
-  const v=V[vibe],L=v.s,s=L[idx%L.length],q=encodeURIComponent(s[0]+" "+s[1]);
-  $("vtag").textContent="your vibe";$("vname").textContent=v.n;
-  $("vcap").textContent=cur.cap||v.c[seed%v.c.length];
-  $("st").textContent=s[0];$("sa").textContent=s[1];
-  $("stt").textContent=s[0];$("sta").textContent=s[1];$("simg").src=$("prev").src;
-  $("sp").href="https://open.spotify.com/search/"+q;$("yt").href="https://www.youtube.com/results?search_query="+q;
-  $("r1").textContent=F(s[2]);
-  $("hk").style.left=(s[3]/s[2]*100)+"%";$("hk").style.width=(Math.min(30,s[2]-s[3])/s[2]*100)+"%";
-  const pr=[["Chorus hit",s[3]],["Build-up",s[3]-8],["Intro mood",0],["Final chorus",s[2]*.72]];
-  $("pre").innerHTML="";
-  pr.forEach(p=>{const b=document.createElement("button");b.textContent=p[0];b.onclick=()=>clip(p[1]);$("pre").appendChild(b)});
-  [5,10,15].forEach(n=>{const b=document.createElement("button");b.textContent=n+"s";if(n===win)b.className="cur";
-    b.onclick=()=>{win=n;show()};$("pre").appendChild(b)});
-  clip(Math.max(0,s[3]-(win<15?0:0)));
-  const lv=62+((seed*13+idx*17)%37);
-  $("lm").style.width="0";setTimeout(()=>$("lm").style.width=lv+"%",30);
-  $("lt").textContent="Larp level: "+lv+"% — "+(lv>85?"fully believable, go post it":lv>72?"pulls it off":"needs a mysterious caption");
-  const A=$("alt");A.innerHTML="";
-  Object.keys(V).forEach(k=>{const b=document.createElement("button");b.textContent=V[k].n;if(k===vibe)b.className="cur";
-    b.onclick=()=>{vibe=k;idx=0;show()};A.appendChild(b)});
-  const ls=document.createElement("div");ls.className="lst";
-  L.forEach((t,i)=>{const b=document.createElement("button");b.innerHTML="";b.append(t[0]+" ");const m=document.createElement("small");m.textContent="· "+t[1];b.appendChild(m);
-    if(i===idx%L.length)b.className="cur";b.onclick=()=>{idx=i;show()};ls.appendChild(b)});
-  A.appendChild(ls);
-};
-let yp=null,live=false,ysong="",tk=0,db=0;
-const _c=clip;clip=function(t){_c(t);seek()};
-function curSong(){const L=V[vibe].s;return L[idx%L.length][0]}
-function seek(){if(!live||!yp||!yp.seekTo||curSong()!==ysong)return;clearTimeout(db);db=setTimeout(()=>{yp.seekTo(t0,true);yp.playVideo()},180)}
-function ytId(u){const m=u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);return m&&m[1]}
-function loadYT(){return new Promise((ok,no)=>{if(window.YT&&YT.Player)return ok();const s=document.createElement("script");s.src="https://www.youtube.com/iframe_api";s.onerror=()=>no(new Error("blocked or offline"));window.onYouTubeIframeAPIReady=ok;document.head.appendChild(s);setTimeout(()=>no(new Error("timed out")),8000)})}
-$("yg").onclick=async()=>{const m=$("pvm"),id=ytId($("yl").value);m.classList.remove("hide");
-  if(!id){m.textContent="That doesn’t look like a YouTube link. Tap the YouTube button above, open the song, and copy its address.";return}
-  try{await loadYT();$("ytw").classList.remove("hide");ysong=curSong();
-    if(yp&&yp.loadVideoById)yp.loadVideoById({videoId:id,startSeconds:t0});
-    else yp=new YT.Player("ytp",{width:"100%",height:"100%",videoId:id,playerVars:{start:Math.floor(t0),playsinline:1},events:{onReady:e=>{e.target.seekTo(t0,true);e.target.playVideo()}}});
-    live=true;clearInterval(tk);tk=setInterval(()=>{try{if(yp.getCurrentTime()>=t0+win)yp.seekTo(t0,true)}catch(e){}},300);
-    m.textContent="Live: drag the slider or tap a preset and it jumps there and loops your "+win+"s clip.";
-  }catch(e){m.textContent="Couldn’t load the YouTube player from this page ("+(e&&e.message||e)+")."}};
-$("rg").oninput=e=>clip(+e.target.value);
-// ---- v3: AI photo report + live songs (needs the Worker: paste its URL below) ----
 const API='https://larp-api.anaghpandey13.workers.dev',ON=/^https?:/.test(API);
-const R={lighting:'Lighting',composition:'Composition',posture:'Posture & pose',angle:'Camera angle',expression:'Expression',color:'Color harmony',depth:'Depth & background',exposure:'Exposure & clarity'};
-const PROMPT='You are judging a photo for a music-matching app. Score each 0-10, honestly, not flatteringly: lighting; composition (thirds, balance, leading lines, framing); posture (body pose and posture of any person, else the subject’s stance); angle (camera angle and distance); expression (mood in face or body language, if visible); color (harmony, palette); depth (subject separation, background blur, clutter); exposure (brightness, sharpness, noise). Also give valence (0 dark/sad to 1 bright/happy), arousal (0 calm to 1 energetic), the closest vibe key from: KEYS, 3 to 5 mood tags chosen only from: chill, dreamy, romantic, nostalgic, melancholy, dark, night, summer, sunny, energetic, party, confident, cinematic, travel, cozy, indie, soulful, happy, sad, aesthetic; a funny lowercase caption of at most 10 words about the vibe; best (one sentence on what works) and fix (one sentence, one concrete way to improve the shot). Never guess anyone’s ethnicity, nationality, religion, age or identity. Reply with JSON only: {"valence":0,"arousal":0,"vibe":"","tags":[],"caption":"","best":"","fix":"","scores":{"lighting":0,"composition":0,"posture":0,"angle":0,"expression":0,"color":0,"depth":0,"exposure":0}}';
-function b2b(b){const a=atob(b),u=new Uint8Array(a.length);for(let i=0;i<a.length;i++)u[i]=a.charCodeAt(i);return new Blob([u],{type:'image/jpeg'})}
-function toB64(img){const c=document.createElement('canvas'),k=Math.min(1,768/Math.max(img.width,img.height));c.width=img.width*k;c.height=img.height*k;c.getContext('2d').drawImage(img,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.82).split(',')[1]}
-const vkeys=()=>Object.keys(V).filter(k=>k!=='live');
-async function judge(img){const b=toB64(img);
-  try{if(ON){const r=await fetch(API+'/judge',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({image:b,keys:vkeys()})});if(r.ok){const j=await r.json();if(j&&V[j.vibe])return j}}}catch(e){}
-  try{if(window.claude&&claude.use){const s=await claude.use('sample');if(s){const l=await s.limits();if(l&&l.images){const j=await s.json(PROMPT.replace('KEYS',vkeys().join(', ')),{images:[b2b(b)],modelTier:'quick'});if(j&&V[j.vibe])return j}}}}catch(e){}
-  return null}
-aiVibe=async function(img){const j=await judge(img);if(j)cur.j=j;return j};
-function rep(){const j=cur&&cur.j,b=$('rep');if(!j){b.innerHTML='';return}
-  let h='';Object.keys(R).forEach(k=>{const v=Math.max(0,Math.min(10,Math.round(+((j.scores||{})[k])||0)));h+='<div class="sc"><span>'+R[k]+'</span><div class="meter"><i style="width:'+v*10+'%"></i></div><b>'+v+'</b></div>'});
-  b.innerHTML=h;const p=(t,x)=>{const e=document.createElement('p');e.className='tip';e.textContent=t+x;b.appendChild(e)};
-  if(j.best)p('Works: ',j.best);if(j.fix)p('Try: ',j.fix);
-  if(j.valence!=null)p('Mood read: ',Math.round(j.valence*100)+'% positive, '+Math.round((j.arousal||0)*100)+'% energy')}
-async function loadLive(){const j=cur.j||{tags:TG[vibe]||['chill']};if(!ON)return;
-  try{const q='tags='+encodeURIComponent((j.tags||[]).slice(0,2).join(','))+'&lang='+encodeURIComponent($('lg').value)+'&country=India';
-    const d=await (await fetch(API+'/songs?'+q)).json();if(!d.songs||!d.songs.length)return;
-    V.live={n:'Live picks for your photo',c:['fresh from the charts, matched to your frame','picked from what people are playing right now'],s:d.songs.map(t=>[t.title,t.artist,210,63,1])};
-    vibe='live';idx=0;show()}catch(e){}}
-const vc={};let auto=false;const TG={night:['night','dark'],golden:['sunny','summer'],moody:['melancholy','sad'],fresh:['happy','chill'],hype:['party','energetic'],retro:['nostalgic','soulful'],desi:['romantic','soulful'],south:['energetic','party'],punjabi:['party','confident']};
-function fix(){const L=V[vibe].s,s=L[idx%L.length];if(!s[4]||ysong!==s[0]||!yp||!yp.getDuration)return;const d=Math.round(yp.getDuration());if(d>30){s[2]=d;s[3]=Math.round(d*.3);s[4]=0;show()}}
-async function ytLoad(id,s){await loadYT();$('ytw').classList.remove('hide');ysong=s[0];
-  if(yp&&yp.loadVideoById)yp.loadVideoById({videoId:id,startSeconds:t0});
-  else yp=new YT.Player('ytp',{width:'100%',height:'100%',videoId:id,playerVars:{start:Math.floor(t0),playsinline:1},events:{onReady:e=>{e.target.seekTo(t0,true);e.target.playVideo()},onStateChange:e=>{if(e.data===1)fix()}}});
-  live=true;clearInterval(tk);tk=setInterval(()=>{try{if(yp.getCurrentTime()>=t0+win)yp.seekTo(t0,true)}catch(e){}},300)}
-async function autoYT(){const L=V[vibe].s,s=L[idx%L.length],m=$('pvm');if(ysong===s[0]&&live)return;
-  m.classList.remove('hide');m.textContent='Finding the song…';
-  try{const k=s[0]+'|'+s[1];let id=vc[k];
-    if(!id){const d=await (await fetch(API+'/resolve?title='+encodeURIComponent(s[0])+'&artist='+encodeURIComponent(s[1]))).json();id=d.videoId;if(id)vc[k]=id}
-    if(!id)throw new Error('no match');
-    if(curSong()!==s[0])return;
-    await ytLoad(id,s);m.textContent='Live: drag the slider or tap a preset and your clip plays from there, on a loop.'
-  }catch(e){m.textContent='Couldn’t load this song’s audio ('+(e&&e.message||e)+'). Use the Spotify or YouTube button instead.'}}
-const _sh=show;show=function(){_sh();rep();
-  if(ON){$('yl').parentNode.style.display='none';if(cur&&!cur.lv){cur.lv=1;loadLive()}if(auto)autoYT()}};
-$('lg').onchange=()=>{if(cur)cur.lv=0;show()};
-if(ON){document.querySelector('.drop small').textContent='or drag it in. With live mode on, your photo goes to an AI service to read the vibe and is not saved by this site.';
-  const pc=document.createElement('button');pc.textContent='▶ Play my clip';pc.className='pri';pc.onclick=()=>{auto=true;autoYT()};$('pv').before(pc)}
-function jsonp(u){return new Promise((ok,no)=>{const f="cb"+Date.now(),s=document.createElement("script"),t=setTimeout(()=>{cl();no(new Error("timed out"))},7000);
-  function cl(){clearTimeout(t);delete window[f];s.remove()}
-  window[f]=d=>{cl();ok(d)};s.onerror=()=>{cl();no(new Error("blocked or offline"))};s.src=u+"&callback="+f;document.head.appendChild(s)})}
-$("pv").onclick=async()=>{const s=V[vibe].s[idx%V[vibe].s.length],m=$("pvm");m.classList.remove("hide");m.textContent="Looking for a 30-second preview…";
-  try{const j=await jsonp("https://itunes.apple.com/search?media=music&entity=song&limit=1&country=IN&term="+encodeURIComponent(s[0]+" "+s[1]));
-    const u=j.results&&j.results[0]&&j.results[0].previewUrl;if(!u){m.textContent="Apple has no preview for this song. Try Spotify or YouTube.";return}
-    const a=$("au");a.src=u.replace("http://","https://");await a.play();m.textContent="Playing Apple’s 30-second preview of "+s[0]+".";
-  }catch(e){m.textContent=(e&&e.name==="NotAllowedError")?"Your browser blocked playback. Tap Preview again.":"Couldn’t reach Apple’s preview service from this page ("+(e&&e.message||e)+"). Use Spotify or YouTube instead."}};
-$("mk").onclick=async()=>{
-  const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),im=$("prev"),w=im.naturalWidth,h=im.naturalHeight,r=Math.max(1080/w,1350/h);
-  x.drawImage(im,(1080-w*r)/2,(1350-h*r)/2,w*r,h*r);
-  const g=x.createLinearGradient(0,750,0,1350);g.addColorStop(0,"rgba(0,0,0,0)");g.addColorStop(1,"rgba(0,0,0,.8)");x.fillStyle=g;x.fillRect(0,750,1080,600);
-  const v=V[vibe],s=v.s[idx%v.s.length],f='"DM Sans",system-ui,sans-serif';
-  x.fillStyle="rgba(20,18,26,.78)";x.beginPath();x.moveTo(90,1030);x.arcTo(990,1030,990,1190,44);x.arcTo(990,1190,90,1190,44);x.arcTo(90,1190,90,1030,44);x.arcTo(90,1030,990,1030,44);x.fill();
-  const d=x.createLinearGradient(110,0,190,0);d.addColorStop(0,"#ff4f81");d.addColorStop(1,"#7a5cff");x.fillStyle=d;x.beginPath();x.arc(160,1110,42,0,7);x.fill();
-  x.fillStyle="#fff";x.font="bold 40px "+f;x.textBaseline="middle";x.fillText("♪",147,1112);
-  x.font="bold 46px "+f;x.fillText(s[0].slice(0,26),230,1088);x.font="32px "+f;x.globalAlpha=.75;x.fillText(s[1].slice(0,34),230,1140);x.globalAlpha=1;
-  x.font="bold 34px "+f;x.fillText(v.n+"  ·  "+F(t0)+" – "+F(t0+win),90,1250);
-  x.font="28px "+f;x.globalAlpha=.7;x.fillText("made with larp my vibe",90,1300);x.globalAlpha=1;
-  const b=await new Promise(q=>c.toBlob(q,"image/png"));
-  $("cardimg").src=URL.createObjectURL(b);$("cardimg").classList.remove("hide");
-  try{const dl=window.claude&&claude.use?await claude.use("downloads"):null;if(dl)await dl.save({filename:"larp-my-vibe.png",data:b})}catch(e){}
+const $=id=>document.getElementById(id);
+const VIBES={night:'After dark',golden:'Golden hour',moody:'Moody',fresh:'Fresh air',hype:'Loud',retro:'Retro',dreamy:'Dreamy',cinematic:'Cinematic'};
+const DEPTHS=['Common','Deep cut','Basement'];
+
+// Starter crate, used only when the backend is off. Each line is Title~Artist.
+const SEED={
+night:['Galactic Melt~Com Truise','Sentient~Perturbator','Turbo Killer~Carpenter Brut','Running in the Night~FM-84','Tech Noir~GUNSHIP'],
+golden:['Maria También~Khruangbin','Show Me How~Men I Trust','Skiptracing~Mild High Club','Archie, Marry Me~Alvvays','Nakamarra~Hiatus Kaiyote'],
+moody:['Inside Out~Duster','Heaven or Las Vegas~Cocteau Twins','When the Sun Hits~Slowdive','Pink Moon~Nick Drake','Katy Song~Red House Painters'],
+fresh:['Go Outside~Cults','Chinatown~Wild Nothing','Sleep Apnea~Beach Fossils','Catamaran~Allah-Las','Freaks~Surf Curse'],
+hype:['Get Got~Death Grips','Zodiac Shit~Flying Lotus','Doorman~slowthai','Nanchaku~Seedhe Maut','Ain’t It Funny~Danny Brown'],
+retro:['Sparkle~Tatsuro Yamashita','Remember Summer Days~Anri','Say Goodbye~Hiroshi Sato','Telephone Number~Junko Ohashi','Plastic Love~Mariya Takeuchi'],
+dreamy:['Dreams Tonite~Alvvays','Thursday~Asobi Seksu','Tugboat~Galaxie 500','Alison~Slowdive','Pearly-Dewdrops’ Drops~Cocteau Twins'],
+cinematic:['Hoppípolla~Sigur Rós','Your Hand in Mine~Explosions in the Sky','Auto Rock~Mogwai','Says~Nils Frahm','On the Nature of Daylight~Max Richter']
 };
-})();
+
+// Lines are real quotes from films, shows, books and people. Each is text|source.
+const Q={
+night:['All those moments will be lost in time, like tears in rain.|Blade Runner, 1982','I was within and without, simultaneously enchanted and repelled by the inexhaustible variety of life.|F. Scott Fitzgerald, The Great Gatsby','You talkin’ to me?|Taxi Driver, 1976','It’s only after we’ve lost everything that we’re free to do anything.|Fight Club, 1999','Without music, life would be a mistake.|Friedrich Nietzsche','We are all in the gutter, but some of us are looking at the stars.|Oscar Wilde','Why so serious?|The Dark Knight, 2008'],
+moody:['The world breaks everyone, and afterward many are strong at the broken places.|Ernest Hemingway, A Farewell to Arms','So we beat on, boats against the current, borne back ceaselessly into the past.|F. Scott Fitzgerald, The Great Gatsby','A heart’s a heavy burden.|Howl’s Moving Castle, 2004','One must imagine Sisyphus happy.|Albert Camus','Sometimes we forget things if we have no one to tell them to.|The Lunchbox, 2013','Babumoshai, zindagi badi honi chahiye, lambi nahi.|Anand, 1971'],
+golden:['Life moves pretty fast.|Ferris Bueller’s Day Off, 1986','In the midst of winter, I found there was, within me, an invincible summer.|Albert Camus','Yesterday is history, tomorrow is a mystery, but today is a gift.|Kung Fu Panda, 2008','Carpe diem. Seize the day, boys.|Dead Poets Society, 1989','Anyone can cook.|Ratatouille, 2007','Main apni favourite hoon.|Jab We Met, 2007'],
+fresh:['Bade bade deshon mein aisi chhoti chhoti baatein hoti rehti hain.|Dilwale Dulhania Le Jayenge, 1995','All izz well.|3 Idiots, 2009','Be water, my friend.|Bruce Lee','Tussi ja rahe ho? Tussi na jao.|Kuch Kuch Hota Hai, 1998','Anyone can cook.|Ratatouille, 2007','Life moves pretty fast.|Ferris Bueller’s Day Off, 1986'],
+hype:['Float like a butterfly, sting like a bee.|Muhammad Ali','Mogambo khush hua.|Mr. India, 1987','I am the one who knocks.|Breaking Bad','Say my name.|Breaking Bad','By order of the Peaky Blinders.|Peaky Blinders','Kitne aadmi the?|Sholay, 1975','I’m gonna make him an offer he can’t refuse.|The Godfather, 1972','Picture abhi baaki hai mere dost.|Om Shanti Om, 2007'],
+retro:['Here’s looking at you, kid.|Casablanca, 1942','Anand mara nahi, Anand marte nahi.|Anand, 1971','Rishte mein toh hum tumhare baap lagte hain, naam hai Shahenshah.|Shahenshah, 1988','Mere paas maa hai.|Deewaar, 1975','Don ko pakadna mushkil hi nahi, namumkin hai.|Don','I’m gonna make him an offer he can’t refuse.|The Godfather, 1972'],
+dreamy:['We are such stuff as dreams are made on.|William Shakespeare, The Tempest','Once you’ve met someone, you never really forget them.|Spirited Away, 2001','Love is the one thing that transcends time and space.|Interstellar, 2014','I am rooted, but I flow.|Virginia Woolf, The Waves','Your pain is the breaking of the shell that encloses your understanding.|Kahlil Gibran, The Prophet'],
+cinematic:['See you, space cowboy.|Cowboy Bebop','Do or do not. There is no try.|The Empire Strikes Back, 1980','I’ll be back.|The Terminator, 1984','Houston, we have a problem.|Apollo 13, 1995','Life is like a box of chocolates.|Forrest Gump, 1994','All those moments will be lost in time, like tears in rain.|Blade Runner, 1982'],
+hi:['Kitne aadmi the?|Sholay, 1975','Mogambo khush hua.|Mr. India, 1987','Main apni favourite hoon.|Jab We Met, 2007','Picture abhi baaki hai mere dost.|Om Shanti Om, 2007','All izz well.|3 Idiots, 2009'],
+south:['Naan oru thadava sonna nooru thadava sonna maadhiri.|Baashha, 1995','Pushpa naam sunke flower samjhe kya? Flower nahi, fire hai main.|Pushpa: The Rise, 2021']
+};
+const QLANG={hindi:'hi',punjabi:'hi',tamil:'south',telugu:'south',malayalam:'south'};
+
+const st={vibe:'moody',depth:1,songs:[],i:-1,img:null,q:null,win:15,t0:0,dur:0,auto:false,yp:null,ysong:'',tk:0,fixed:false};
+const F=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+
+// ---- reading the photo (brightness, colour, contrast) ----
+function analyze(img){
+  const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.drawImage(img,0,0,64,64);
+  const d=x.getImageData(0,0,64,64).data,n=d.length/4;let R=0,B=0,S=0;const L=[];
+  for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);R+=r;B+=b;S+=mx?(mx-mn)/mx:0;L.push((.299*r+.587*g+.114*b)/255)}
+  const lum=L.reduce((a,b)=>a+b,0)/n,sat=S/n,con=Math.sqrt(L.reduce((a,b)=>a+(b-lum)**2,0)/n),warm=(R-B)/n;
+  if(lum<.3)return sat>.45&&con>.25?'hype':'night';
+  if(sat>.45&&con>.22)return 'hype';
+  if(lum>.6&&con<.16)return 'dreamy';
+  if(con>.28&&lum<.55)return 'cinematic';
+  if(warm>25&&lum>.5)return 'golden';
+  if(sat<.28&&warm>8)return 'retro';
+  if(lum>.55)return 'fresh';
+  return 'moody';
+}
+
+// ---- controls ----
+function tabs(box,items,cur,fn){box.innerHTML='';items.forEach(([k,l])=>{const b=document.createElement('button');b.className='tab';b.textContent=l;b.setAttribute('aria-pressed',k==cur);b.onclick=()=>fn(k);box.appendChild(b);box.append(' ')})}
+function drawTabs(){
+  tabs($('vibes'),Object.entries(VIBES),st.vibe,k=>{st.vibe=k;st.q=null;newQuote();drawTabs();dig()});
+  tabs($('depth'),DEPTHS.map((l,i)=>[i,l]),st.depth,i=>{st.depth=+i;drawTabs();dig()});
+}
+function newQuote(){
+  const pool=(Q[st.vibe]||[]).slice(),extra=Q[QLANG[$('lang').value]];
+  if(extra&&Math.random()<.5)pool.push(...extra);
+  let q;do{q=rnd(pool)}while(q===st.q&&pool.length>1);
+  st.q=q;const p=q.split('|');$('qt').textContent='“'+p[0]+'”';$('qs').textContent=p[1];
+}
+
+// ---- digging for songs ----
+async function dig(){
+  const ul=$('list');ul.innerHTML='';st.songs=[];st.i=-1;$('pl').style.display='none';$('sticker').style.display='none';
+  const li=document.createElement('li');li.className='empty';li.textContent='Digging…';ul.appendChild(li);
+  let songs=[],msg='';
+  if(ON){
+    try{const r=await fetch(API+'/songs?vibe='+st.vibe+'&depth='+st.depth+'&lang='+encodeURIComponent($('lang').value));const d=await r.json();songs=d.songs||[];if(d.error)msg=d.error}
+    catch(e){msg='Couldn’t reach the song service.'}
+  }
+  if(!songs.length){songs=(SEED[st.vibe]||[]).map(s=>{const p=s.split('~');return{title:p[0],artist:p[1]}});
+    msg=(ON?'Showing a starter crate instead. '+msg:'Showing a starter crate. Connect the song service for endless digging.')}
+  st.songs=songs;ul.innerHTML='';
+  songs.forEach((s,i)=>{const l=document.createElement('li'),b=document.createElement('button'),t=document.createElement('span'),a=document.createElement('span');
+    t.className='t';t.textContent=s.title;a.className='a';a.textContent=s.artist;b.append(t,a);b.onclick=()=>pick(i);l.appendChild(b);ul.appendChild(l)});
+  if(msg){const m=document.createElement('li');m.className='empty';m.textContent=msg;ul.prepend(m)}
+}
+function cur(){return st.songs[st.i]}
+function pick(i){
+  st.i=i;st.dur=0;st.fixed=false;st.t0=0;
+  [...$('list').querySelectorAll('button')].forEach((b,j)=>b.setAttribute('aria-current',j===i));
+  const s=cur(),q=encodeURIComponent(s.artist+' '+s.title);
+  $('pl').style.display='block';$('pt').textContent=s.title;$('pa').textContent=s.artist;
+  $('yt').href='https://www.youtube.com/results?search_query='+q;$('sp').href='https://open.spotify.com/search/'+q;
+  $('ctl').hidden=true;$('msg').textContent=ON?'Press Play to load the song and choose your 15 seconds.':'Open the song, then pick your 15 seconds in Instagram’s own slider.';
+  $('play').style.display=ON?'':'none';
+  sticker();if(st.auto)play();
+}
+function sticker(){
+  const s=cur();if(!s)return;$('stt').textContent=s.title;
+  $('sta').textContent=s.artist+(st.dur?'  '+F(st.t0)+' to '+F(st.t0+st.win):'');$('sticker').style.display=st.img?'block':'none';
+}
+
+// ---- playing and choosing the clip ----
+const vc={};
+function loadYT(){return new Promise((ok,no)=>{if(window.YT&&YT.Player)return ok();const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';s.onerror=()=>no(new Error('YouTube is blocked on this network'));window.onYouTubeIframeAPIReady=ok;document.head.appendChild(s);setTimeout(()=>no(new Error('YouTube timed out')),8000)})}
+async function play(){
+  const s=cur();if(!s||!ON)return;st.auto=true;const m=$('msg');m.textContent='Finding the song…';
+  try{
+    const k=s.artist+'|'+s.title;let id=vc[k];
+    if(!id){const d=await(await fetch(API+'/resolve?title='+encodeURIComponent(s.title)+'&artist='+encodeURIComponent(s.artist))).json();id=d.videoId;if(id)vc[k]=id;else if(d.error)throw new Error(d.error.includes('quota')?'today’s lookup limit is used up':d.error)}
+    if(!id)throw new Error('no playable copy found');
+    if(cur()!==s)return;
+    await loadYT();$('ytw').style.display='block';st.ysong=s.title;st.dur=0;st.fixed=false;
+    if(st.yp&&st.yp.loadVideoById)st.yp.loadVideoById({videoId:id,startSeconds:0});
+    else st.yp=new YT.Player('ytp',{width:'100%',height:'100%',videoId:id,playerVars:{playsinline:1},events:{onReady:e=>e.target.playVideo(),onStateChange:e=>{if(e.data===1)ready()}}});
+    clearInterval(st.tk);st.tk=setInterval(()=>{try{if(st.dur&&st.yp.getCurrentTime()>=st.t0+st.win)st.yp.seekTo(st.t0,true)}catch(e){}},300);
+    m.textContent='Drag the slider. The clip loops from wherever you stop. On unknown songs we can’t tell where the hook is, so scrub and listen.';
+  }catch(e){m.textContent='Couldn’t play this one ('+(e.message||e)+'). Use the YouTube or Spotify button.'}
+}
+function ready(){
+  if(st.fixed||!st.yp.getDuration)return;const d=Math.round(st.yp.getDuration());if(d<20)return;
+  st.fixed=true;st.dur=d;$('ctl').hidden=false;$('re').textContent=F(d);clip(Math.round(d*.3),true);
+}
+function clip(t,go){
+  if(!st.dur)return;st.t0=Math.max(0,Math.min(t,st.dur-st.win));
+  $('rg').max=st.dur-st.win;$('rg').value=st.t0;$('rc').textContent=F(st.t0)+' to '+F(st.t0+st.win);
+  tabs($('pre'),[[0,'Start'],[.25,'Quarter'],[.5,'Middle'],[.75,'Late']],-1,f=>clip(Math.round(st.dur*f),true));
+  tabs($('lens'),[5,10,15].map(n=>[n,n+' sec']),st.win,n=>{st.win=+n;clip(st.t0,true)});
+  sticker();
+  if(go){clearTimeout(st.db);st.db=setTimeout(()=>{try{st.yp.seekTo(st.t0,true);st.yp.playVideo()}catch(e){}},160)}
+}
+$('rg').oninput=e=>clip(+e.target.value,true);
+
+// ---- photo in ----
+function handle(f){
+  if(!f||!f.type.startsWith('image/'))return;
+  const url=URL.createObjectURL(f),im=new Image();
+  im.onload=()=>{
+    st.img=im;$('photo').src=url;$('frame').classList.add('on');
+    st.vibe=analyze(im);st.q=null;newQuote();drawTabs();
+    $('nq').disabled=$('sv').disabled=false;$('lead').textContent='Read as “'+VIBES[st.vibe].toLowerCase()+'”. Change the mood if that’s wrong.';
+    sticker();dig();
+  };
+  im.src=url;
+}
+$('file').onchange=e=>handle(e.target.files[0]);
+$('chg').onclick=()=>$('file').click();
+$('nq').onclick=newQuote;
+$('dig').onclick=dig;
+$('lang').onchange=()=>{if(st.img)newQuote();dig()};
+$('play').onclick=play;
+['dragover','dragenter'].forEach(t=>$('frame').addEventListener(t,e=>e.preventDefault()));
+$('frame').addEventListener('drop',e=>{e.preventDefault();handle(e.dataTransfer.files[0])});
+
+// ---- save the story as an image ----
+function wrap(x,t,w){const o=[];let l='';t.split(' ').forEach(wd=>{const n=l?l+' '+wd:wd;if(x.measureText(n).width>w&&l){o.push(l);l=wd}else l=n});o.push(l);return o}
+async function save(){
+  if(!st.img)return;try{await document.fonts.ready}catch(e){}
+  const c=document.createElement('canvas');c.width=1080;c.height=1920;const x=c.getContext('2d'),im=st.img,r=Math.max(1080/im.width,1920/im.height);
+  x.drawImage(im,(1080-im.width*r)/2,(1920-im.height*r)/2,im.width*r,im.height*r);
+  const g=x.createLinearGradient(0,900,0,1920);g.addColorStop(0,'rgba(10,14,40,0)');g.addColorStop(1,'rgba(10,14,40,.9)');x.fillStyle=g;x.fillRect(0,900,1080,1020);
+  const p=st.q.split('|');x.fillStyle='#fff';x.font='italic 400 68px Newsreader, Georgia, serif';x.textBaseline='alphabetic';
+  const ls=wrap(x,'“'+p[0]+'”',900),y0=1790-ls.length*86;ls.forEach((l,i)=>x.fillText(l,90,y0+i*86));
+  x.fillStyle='#FFC83D';x.font='600 34px Archivo, sans-serif';x.fillText(p[1],90,1850);
+  const s=cur();
+  if(s){x.save();x.translate(70,150);x.rotate(-.05);x.fillStyle='#FFC83D';x.fillRect(0,0,720,s&&st.dur?170:140);
+    x.fillStyle='#0E1535';x.font='800 48px Archivo, sans-serif';x.fillText(s.title.slice(0,30),28,62);x.font='400 32px Archivo, sans-serif';
+    x.fillText(s.artist.slice(0,36),28,110);if(st.dur){x.font='600 30px Archivo, sans-serif';x.fillText(F(st.t0)+' to '+F(st.t0+st.win),28,152)}x.restore()}
+  c.toBlob(b=>{const u=URL.createObjectURL(b);$('out').src=u;$('out').style.display='block';const a=document.createElement('a');a.href=u;a.download='larp-my-vibe.png';a.click()},'image/png');
+}
+$('sv').onclick=save;
+drawTabs();
 </script>
 </body>
 </html>
