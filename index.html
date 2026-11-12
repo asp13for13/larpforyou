@@ -57,10 +57,25 @@ body.playing .disc{animation:spin 2.4s linear infinite}
 .tab{background:none;border:0;border-bottom:3px solid transparent;padding:4px 0;cursor:pointer;font-weight:600}
 .tab[aria-pressed=true]{border-bottom-color:var(--sun)}
 select{background:var(--bg2);border:2px solid var(--line);padding:6px 10px}
-#dock{display:none;grid-template-columns:1fr;gap:20px;margin:22px 0 8px;padding:16px;background:var(--bg2);border-left:6px solid var(--sun);position:relative;z-index:3}
+#dock{display:none;position:absolute;left:0;right:0;bottom:0;z-index:3;grid-template-columns:1fr;gap:4px;padding:12px 14px 14px;background:rgba(14,21,53,.92);color:var(--paper)}
 #dock.on{display:grid}
-@media(min-width:880px){#dock{position:sticky;top:12px}}
 .pw{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+.frame.pl #quote{bottom:190px}.frame.pl #quote p{font-size:1.2rem}
+#dock .inf h3{font-size:1.15rem}#dock .tt{margin-bottom:0}#dock .tt img{width:44px;height:44px}#dock .by{margin:0;font-size:.95rem}
+#dock .rowb{gap:6px;margin-top:2px}#dock .btn{padding:6px 10px;font-size:.9rem}#dock .msg{margin:6px 0 0}
+#quiz{border:2px solid var(--paper);padding:18px;margin-bottom:24px;background:var(--bg2)}
+#quiz .qn{color:var(--mute);font-size:.9rem;margin:0 0 8px}
+#quiz h3{margin:0 0 14px;font-size:clamp(1.7rem,4.4vw,2.4rem);line-height:.95}
+#quiz .opts{display:grid;gap:8px}
+#quiz .opt{text-align:left;padding:12px 14px;font-weight:600;border:2px solid var(--line);background:none;cursor:pointer}
+#quiz .opt:hover,#quiz .opt:focus-visible{border-color:var(--sun)}
+#quiz .dots{display:flex;gap:6px;margin-top:16px}
+#quiz .dots i{width:24px;height:4px;background:var(--line)}#quiz .dots i.d{background:var(--sun)}
+#quiz .skip{background:none;border:0;color:var(--mute);cursor:pointer;margin:12px 0 0;padding:0;text-decoration:underline}
+#mood{margin-bottom:22px}
+#mood .mn{margin:2px 0 0;font-size:clamp(2.2rem,6vw,3.4rem);line-height:.88}
+#mood .cands{color:var(--mute);margin:8px 0 12px;font-size:.95rem}
+#crate.q .aft{display:none}
 .inf{min-width:0;display:flex;flex-direction:column;justify-content:center}
 .inf h3{margin:0;font-size:1.7rem;line-height:.95;overflow-wrap:anywhere}
 .by{font:italic 400 1.05rem "Newsreader",Georgia,serif;color:var(--mute);margin:2px 0 10px}
@@ -105,6 +120,16 @@ ul.songs .empty{padding:12px 6px;color:var(--mute)}
       <div class="shade"></div>
       <div id="sticker"><i class="disc"></i><img id="sart" alt="" hidden><div><b id="stt"></b><span id="sta"></span></div></div>
       <blockquote id="quote"><p id="qt"></p><cite id="qs"></cite></blockquote>
+    <div id="dock">
+      <div class="pw" id="pw"><div id="ytp"></div></div>
+      <div class="inf">
+        <div class="tt"><img id="art" alt="" hidden><div><h3 class="cond" id="pt"></h3><p class="by" id="pa"></p></div></div>
+        <input type="range" id="rg" min="0" max="100" value="0" aria-label="Where your clip starts" disabled>
+        <div class="rt"><span>0:00</span><b id="rc"></b><span id="re"></span></div>
+        <div class="rowb"><span id="lens"></span><button class="btn pri" id="pp" disabled>Pause</button><button class="btn" id="heart">Stash</button><button class="btn" id="next">Next</button></div>
+        <p class="msg" id="msg"></p>
+      </div>
+    </div>
     </div>
     <div class="pal" id="pal" aria-label="Colours from your photo"></div>
     <input type="file" id="file" accept="image/*" hidden>
@@ -117,27 +142,22 @@ ul.songs .empty{padding:12px 6px;color:var(--mute)}
   </section>
 
   <section id="crate" aria-label="Songs">
-    <div class="row"><span class="lab">Mood</span><span id="vibes"></span></div>
-    <div class="row"><span class="lab">How deep</span><span id="depth"></span></div>
-    <div class="row"><span class="lab">Language</span>
+    <div id="quiz" hidden></div>
+    <div id="mood" hidden>
+      <p class="lab" style="margin:0">Your vibe</p>
+      <h2 class="mn cond" id="mn"></h2>
+      <p class="cands" id="mc"></p>
+      <div class="row"><span class="lab">Not right?</span><select id="msel" aria-label="Pick a different mood"></select><button class="btn" id="redo">Retake the quiz</button></div>
+    </div>
+    <div class="row aft"><span class="lab">How deep</span><span id="depth"></span></div>
+    <div class="row aft"><span class="lab">Language</span>
       <select id="lang" aria-label="Song language">
-        <option value="">Any</option><option value="hindi">Hindi</option><option value="punjabi">Punjabi</option><option value="tamil">Tamil</option><option value="telugu">Telugu</option><option value="malayalam">Malayalam</option><option value="bengali">Bengali</option><option value="japanese">Japanese</option><option value="korean">Korean</option><option value="spanish">Spanish</option><option value="portuguese">Portuguese</option><option value="french">French</option><option value="arabic">Arabic</option><option value="turkish">Turkish</option><option value="italian">Italian</option><option value="instrumental">Instrumental</option>
+        <option value="">Any</option><option value="hindi">Hindi</option><option value="punjabi">Punjabi</option><option value="haryanvi">Haryanvi</option><option value="tamil">Tamil</option><option value="telugu">Telugu</option><option value="malayalam">Malayalam</option><option value="bengali">Bengali</option><option value="japanese">Japanese</option><option value="korean">Korean</option><option value="spanish">Spanish</option><option value="portuguese">Portuguese</option><option value="french">French</option><option value="arabic">Arabic</option><option value="turkish">Turkish</option><option value="italian">Italian</option><option value="instrumental">Instrumental</option>
       </select>
     </div>
 
-    <div id="dock">
-      <div class="pw" id="pw"><div id="ytp"></div></div>
-      <div class="inf">
-        <div class="tt"><img id="art" alt="" hidden><div><h3 class="cond" id="pt"></h3><p class="by" id="pa"></p></div></div>
-        <input type="range" id="rg" min="0" max="100" value="0" aria-label="Where your clip starts" disabled>
-        <div class="rt"><span>0:00</span><b id="rc"></b><span id="re"></span></div>
-        <div class="rowb"><span id="lens"></span><button class="btn pri" id="pp" disabled>Pause</button><button class="btn" id="heart">Stash</button><button class="btn" id="next">Next</button></div>
-        <p class="msg" id="msg"></p>
-      </div>
-    </div>
-
-    <div class="lh"><h2 class="cond">The crate</h2><button class="btn" id="dig">Dig again</button></div>
-    <ul class="songs" id="list"></ul>
+    <div class="lh aft"><h2 class="cond">The crate</h2><button class="btn" id="dig">Dig again</button></div>
+    <ul class="songs aft" id="list"></ul>
 
     <div id="stashw" hidden>
       <div class="lh"><h2 class="cond">Your stash</h2></div>
@@ -149,7 +169,6 @@ ul.songs .empty{padding:12px 6px;color:var(--mute)}
 <script>
 const API='https://larp-api.anaghpandey13.workers.dev',ON=/^https?:/.test(API);
 const $=id=>document.getElementById(id);
-const VIBES={night:'After dark',golden:'Golden hour',moody:'Moody',fresh:'Fresh air',hype:'Loud',retro:'Retro',dreamy:'Dreamy',cinematic:'Cinematic'};
 const DEPTHS=['Common','Deep cut','Basement'];
 
 // Starter crate, used only when the backend is off. Each line is Title~Artist.
@@ -179,26 +198,34 @@ south:['Naan oru thadava sonna nooru thadava sonna maadhiri.|Baashha, 1995','Pus
 };
 const QLANG={hindi:'hi',punjabi:'hi',tamil:'south',telugu:'south',malayalam:'south'};
 
-const st={vibe:'moody',depth:1,songs:[],cur:null,img:null,q:null,acc:[255,200,61],win:15,t0:0,dur:0,yp:null,tk:0,fixed:false};
+const st={mood:null,cands:[],feat:null,qa:{axes:{},n:0,lang:false,depth:false},vibe:'moody',depth:1,songs:[],cur:null,img:null,q:null,acc:[255,200,61],win:15,t0:0,dur:0,yp:null,tk:0,fixed:false};
 const F=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const interleave=(a,b)=>{const o=[];for(let i=0;i<Math.max(a.length,b.length);i++){if(a[i])o.push(a[i]);if(b[i])o.push(b[i])}return o};
 const ls={get(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const same=(a,b)=>a&&b&&a.title===b.title&&a.artist===b.artist;
 
 // ---- reading the photo ----
-function analyze(img){
-  const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.drawImage(img,0,0,64,64);
-  const d=x.getImageData(0,0,64,64).data,n=d.length/4;let R=0,B=0,S=0;const L=[];
-  for(let i=0;i<d.length;i+=4){const r=d[i],g=d[i+1],b=d[i+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);R+=r;B+=b;S+=mx?(mx-mn)/mx:0;L.push((.299*r+.587*g+.114*b)/255)}
-  const lum=L.reduce((a,b)=>a+b,0)/n,sat=S/n,con=Math.sqrt(L.reduce((a,b)=>a+(b-lum)**2,0)/n),warm=(R-B)/n;
-  if(lum<.3)return sat>.45&&con>.25?'hype':'night';
-  if(sat>.45&&con>.22)return 'hype';
-  if(lum>.6&&con<.16)return 'dreamy';
-  if(con>.28&&lum<.55)return 'cinematic';
-  if(warm>25&&lum>.5)return 'golden';
-  if(sat<.28&&warm>8)return 'retro';
-  if(lum>.55)return 'fresh';
-  return 'moody';
+function scan(img){
+  const N=64,c=document.createElement('canvas');c.width=c.height=N;const x=c.getContext('2d');x.drawImage(img,0,0,N,N);
+  const d=x.getImageData(0,0,N,N).data,n=N*N,L=new Float32Array(n),cl=v=>Math.max(0,Math.min(1,v));
+  let R=0,B=0,S=0,dark=0,bw=0,or=0,bl=0,gr=0,ne=0,ct=0,cn=0,sum=0;
+  for(let i=0;i<n;i++){
+    const r=d[i*4],g=d[i*4+1],b=d[i*4+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b),sat=mx?(mx-mn)/mx:0,l=(.299*r+.587*g+.114*b)/255,px=i%N,py=(i/N)|0;
+    L[i]=l;sum+=l;R+=r;B+=b;S+=sat;if(l<.2)dark++;if(sat<.08)bw++;
+    if(r>g&&g>b&&sat>.35&&l>.35)or++;if(b>r+15&&b>g)bl++;if(g>r+5&&g>b+5)gr++;if(sat>.55&&l>.4)ne++;
+    if(px>16&&px<48&&py>16&&py<48){ct+=l;cn++}
+  }
+  const lum=sum/n,sat=S/n,con=Math.sqrt(L.reduce((a,v)=>a+(v-lum)**2,0)/n),warm=(R-B)/n/255;
+  let ed=0;for(let i=0;i<n-N-1;i++)ed+=Math.abs(L[i]-L[i+1])+Math.abs(L[i]-L[i+N]);ed/=2*n;
+  const bm=(sum-ct)/(n-cn),flash=cl((ct/cn-bm)*4)*(lum<.5?1:.3),neon=lum<.45?cl(ne/n*4):0,dk=dark/n,soft=cl(1-con*2.5);
+  return{lum,sat,con,flash,neon,
+    E:cl(.5*con*3+.25*sat*1.5+.25*ed*6),
+    M:cl(.45*lum+.3*sat+.3*cl(or/n*3)+.1*(1-dk)),
+    N:cl(1.25-1.6*lum+.25*neon+.2*dk),
+    R:cl(.5*soft+.5*Math.max(0,warm*3)),
+    orange:cl(or/n*3),blue:cl(bl/n*2.5),green:cl(gr/n*3),bw:bw/n>.8?1:0,busy:cl(ed*6)};
 }
 function palette(img){
   const c=document.createElement('canvas');c.width=c.height=48;const x=c.getContext('2d');x.drawImage(img,0,0,48,48);
@@ -223,7 +250,6 @@ function drawPal(cols){
 // ---- mood, depth, quotes ----
 function tabs(box,items,cur,fn){box.innerHTML='';items.forEach(([k,l])=>{const b=document.createElement('button');b.className='tab';b.textContent=l;b.setAttribute('aria-pressed',String(k)===String(cur));b.onclick=()=>fn(k);box.appendChild(b);box.append(' ')})}
 function drawTabs(){
-  tabs($('vibes'),Object.entries(VIBES),st.vibe,k=>{st.vibe=k;newQuote();drawTabs();dig()});
   tabs($('depth'),DEPTHS.map((l,i)=>[i,l]),st.depth,i=>{st.depth=+i;drawTabs();dig()});
 }
 function newQuote(){
@@ -232,6 +258,109 @@ function newQuote(){
   let q;do{q=rnd(pool)}while(q===st.q&&pool.length>1);
   st.q=q;const p=q.split('|'),el=$('quote');$('qt').textContent='“'+p[0]+'”';$('qs').textContent=p[1];
   el.classList.remove('f');void el.offsetWidth;el.classList.add('f');
+}
+
+// ---- real moods, the photo reader and the quiz ----
+// a = [energy, crowd, happiness, night, romance], all 0 to 1. g links to quote and starter-song groups. t = search tags.
+const MOODS=[
+{id:'drive',n:'3 a.m. drive',g:'night',a:[.45,0,.4,1,.2],t:['synthwave','darkwave','night drive','electronic']},
+{id:'roof',n:'Rooftop, chai, nobody home',g:'golden',a:[.2,.1,.55,.5,.1],t:['indie folk','lo-fi','acoustic','chill']},
+{id:'rain',n:'Rain on the window',g:'moody',a:[.15,0,.3,.6,.3],t:['sadcore','slowcore','ambient','rainy day']},
+{id:'hostel',n:'Hostel corridor, lights out',g:'night',a:[.3,.3,.45,1,0],t:['lo-fi','bedroom pop','indie','alternative']},
+{id:'over',n:'Almost over you',g:'moody',a:[.3,0,.2,.6,.6],t:['heartbreak','sad','indie pop','singer-songwriter']},
+{id:'soft',n:'Soft launch',g:'fresh',a:[.4,.2,.85,.2,.9],t:['dream pop','bedroom pop','romantic','indie pop']},
+{id:'locked',n:'Locked in',g:'hype',a:[.85,0,.5,.5,0],t:['phonk','hip-hop','rage','trap']},
+{id:'train',n:'Train window, long way home',g:'cinematic',a:[.2,0,.5,.4,.1],t:['post-rock','ambient','instrumental','neoclassical']},
+{id:'gold',n:'Golden hour, nothing to prove',g:'golden',a:[.4,.3,.85,.2,.2],t:['yacht rock','tropicalia','jangle pop','sunshine pop']},
+{id:'dress',n:'Dressed up, nowhere to go',g:'retro',a:[.5,.1,.5,.7,.2],t:['italo disco','new wave','synthpop','disco']},
+{id:'dhaba',n:'Dhaba on the highway',g:'golden',a:[.55,.5,.7,.5,0],t:['folk','road trip','world','desi']},
+{id:'film',n:'Old film, new feelings',g:'retro',a:[.3,.1,.55,.4,.7],t:['city pop','soul','vintage','60s']},
+{id:'chaos',n:'Friends, no plans, good chaos',g:'fresh',a:[.75,.9,.9,.5,0],t:['indie rock','garage rock','surf rock','party']},
+{id:'mirror',n:'Quiet confidence, loud fit',g:'hype',a:[.6,0,.75,.5,.1],t:['alt hip hop','funk','boogie','alternative r&b']},
+{id:'wedding',n:'Wedding season',g:'hype',a:[.9,1,.95,.5,.2],t:['bhangra','dance','dancehall','party']},
+{id:'crowd',n:'Lonely in a crowd',g:'moody',a:[.35,.8,.2,.8,.1],t:['shoegaze','post-punk','indie rock','alternative']},
+{id:'sunday',n:'Sunday reset',g:'dreamy',a:[.15,0,.75,.1,0],t:['bossa nova','chillwave','jazz','ambient pop']},
+{id:'villain',n:'Villain arc',g:'hype',a:[.8,.1,.15,.9,0],t:['dark ambient','drill','industrial','rage']},
+{id:'miss',n:'Missing someone',g:'dreamy',a:[.2,0,.25,.6,.7],t:['dream pop','sad','shoegaze','slowcore']},
+{id:'walk',n:'Main character, walking home',g:'cinematic',a:[.6,.1,.8,.5,.1],t:['indie pop','synthpop','art pop','electropop']},
+{id:'monsoon',n:'Monsoon evening',g:'dreamy',a:[.25,.2,.65,.3,.4],t:['bossa nova','folk','acoustic','lo-fi']}
+];
+const AXI={e:0,s:1,m:2,n:3,r:4};
+const QS={
+e:{q:'How does this moment move?',o:[['Slow, barely moving',.15],['A steady walk',.5],['Can’t sit still',.9]]},
+s:{q:'Who’s in the room?',o:[['Just me',.05],['One or two people',.5],['A whole crowd',.95]]},
+m:{q:'Where’s your head at?',o:[['Hurting a little',.15],['Somewhere in between',.5],['Genuinely good',.9]]},
+n:{q:'What time is it, really?',o:[['Past midnight',1],['Evening',.55],['Broad daylight',.1]]},
+r:{q:'Is anyone on your mind?',o:[['No one',0],['Someone, quietly',.5],['Yes. Loudly.',1]]},
+lang:{q:'What should it sound like?',o:[['Hindi','hindi'],['Punjabi','punjabi'],['Haryanvi','haryanvi'],['English',''],['Surprise me','']]},
+depth:{q:'How deep should I dig?',o:[['Safe, people know it',0],['A deep cut',1],['Basement. Nobody knows it.',2]]}
+};
+function baseScore(m,f){
+  const a=m.a;let s=-(Math.abs(f.E-a[0])+1.2*Math.abs(f.M-a[2])+1.3*Math.abs(f.N-a[3])+.5*Math.abs(f.R-a[4]));
+  const has=l=>l.includes(m.id);
+  if(has(['gold','roof','monsoon','film']))s+=f.orange*1.4;
+  if(has(['rain','train','miss','monsoon']))s+=f.blue*1.1;
+  if(has(['drive','villain','hostel','dress','crowd']))s+=f.neon*1.4;
+  if(has(['chaos','mirror','wedding']))s+=f.flash*1.2;
+  if(has(['sunday','roof','dhaba','gold']))s+=f.green*.9;
+  if(has(['film','over']))s+=f.bw*.9;
+  if(has(['chaos','wedding','crowd','dhaba']))s+=f.busy*.6;
+  return s;
+}
+function ranked(){
+  return st.cands.map(c=>{let sc=c.base;for(const k in st.qa.axes)sc-=1.6*Math.abs(c.m.a[AXI[k]]-st.qa.axes[k]);return{m:c.m,s:sc}}).sort((x,y)=>y.s-x.s);
+}
+function nextQ(){
+  const a=st.qa,done=Object.keys(a.axes).length;if(a.n>=5)return null;
+  if(done<3){
+    const r=ranked();
+    if(!(done>=1&&r[0].s-r[1].s>.5)){
+      let best=null,bs=.25;
+      for(const k of ['e','s','m','n','r']){if(k in a.axes)continue;const v=st.cands.map(c=>c.m.a[AXI[k]]),sp=Math.max(...v)-Math.min(...v);if(sp>bs){bs=sp;best=k}}
+      if(best)return best;
+    }
+  }
+  if(!a.lang)return 'lang';
+  if(!a.depth)return 'depth';
+  return null;
+}
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function showQ(){
+  const k=nextQ(),box=$('quiz');if(!k)return finish();
+  box.hidden=false;box.innerHTML='';const q=QS[k];
+  box.append(el('p','qn','Looks like '+st.cands.map(c=>c.m.n).join(', or ')+'. Question '+(st.qa.n+1)+' of up to 5.'),el('h3','cond',q.q));
+  const o=el('div','opts');
+  q.o.forEach(([l,v])=>{const b=el('button','opt',l);b.onclick=()=>{
+    if(k==='lang'){st.qa.lang=true;$('lang').value=v}else if(k==='depth'){st.qa.depth=true;st.depth=v}else st.qa.axes[k]=v;
+    st.qa.n++;showQ()};o.appendChild(b)});
+  const dots=el('div','dots');for(let i=0;i<5;i++){const d=document.createElement('i');if(i<st.qa.n)d.className='d';dots.appendChild(d)}
+  const sk=el('button','skip','Skip the rest');sk.onclick=finish;
+  box.append(o,dots,sk);
+}
+function finish(){
+  const r=ranked();st.mood=r[0].m;st.vibe=st.mood.g;
+  $('quiz').hidden=true;$('crate').classList.remove('q');
+  $('mn').textContent=st.mood.n;$('mc').textContent='Close calls: '+r.slice(1).map(x=>x.m.n).join(', ');$('mood').hidden=false;
+  const sel=$('msel');sel.innerHTML='';MOODS.forEach(m=>{const o=el('option',null,m.n);o.value=m.id;sel.appendChild(o)});sel.value=st.mood.id;
+  newQuote();drawTabs();dig();
+}
+function startQuiz(){
+  st.cands=MOODS.map(m=>({m,base:baseScore(m,st.feat)})).sort((x,y)=>y.base-x.base).slice(0,3);
+  st.qa={axes:{},n:0,lang:false,depth:false};
+  $('crate').classList.add('q');$('mood').hidden=true;showQ();
+}
+$('msel').onchange=e=>{const m=MOODS.find(x=>x.id===e.target.value);if(!m)return;st.mood=m;st.vibe=m.g;$('mn').textContent=m.n;newQuote();dig()};
+$('redo').onclick=()=>{if(st.feat)startQuiz()};
+
+// Curated language crates: Title, Artist, mood group. Live digging adds more on top.
+const CUR={
+hindi:[['Sleeping Tiger','Peter Cat Recording Co.','night'],['Memories','Peter Cat Recording Co.','moody'],['Class-Sikh','Prabh Deep','night'],['Nanchaku','Seedhe Maut','hype'],['Namastute','Seedhe Maut','hype'],['Shaktimaan','Seedhe Maut','hype'],['Cold/Mess','Prateek Kuhad','moody'],['Tum Jab Paas','Prateek Kuhad','dreamy'],['Aaftaab','The Local Train','golden'],['Chor','Justh','moody'],['Unse Jaake Kehdo','Justh','dreamy'],['Ankahi Baatein','Antaheen','golden'],['Chaukhat','Gini','moody'],['Chaand Baaliyan','Aditya A','dreamy'],['Baarishein','Anuv Jain','moody'],['Khidki','Rajeev Mahour','fresh'],['Do Khidkiyan','Yashraj','fresh'],['Feels Like Yesterday','Kru172','retro'],['Piya Tu Ab To Aaja','Asha Bhosle','retro'],['Aap Jaisa Koi','Nazia Hassan','retro'],['Disco Deewane','Nazia Hassan','retro'],['Rambha Ho','Usha Uthup','retro'],['Yeh Raat Yeh Chandni','Hemant Kumar','dreamy'],['Chaudhvin Ka Chand','Mohammed Rafi','retro'],['In Aankhon Ki Masti','Asha Bhosle','retro'],['Hoshwalon Ko Khabar Kya','Jagjit Singh','moody'],['Chitthi Na Koi Sandesh','Jagjit Singh','moody'],['Mera Piya Ghar Aaya','Nusrat Fateh Ali Khan','cinematic'],['Ye Jo Halka Halka Suroor Hai','Nusrat Fateh Ali Khan','golden'],['Sayonee','Junoon','cinematic'],['Tum Se Hi','Mohit Chauhan','dreamy'],['Kabhi Kabhi Aditi','Rashid Ali','golden']],
+punjabi:[['Dhundhala','Talwiinder','night'],['Gaah','Talwiinder','moody'],['Chitta','Prabh Deep','night'],['Piche Tere','Kunwarr','fresh'],['Kali Teri','Hari Sukhmani','golden'],['Ishqa Da Jahaan','Frappe Ash','moody'],['Saiyaan','Satinder Sartaaj','dreamy'],['Pehle Lalkare Naal','Amar Singh Chamkila','retro'],['Baba Tera Nankana','Amar Singh Chamkila','retro'],['Tere Tille Ton','Kuldeep Manak','retro'],['Chann Kithan Guzaari Aayi Raat Ve','Surinder Kaur','dreamy'],['Jhanjar','Hans Raj Hans','retro']],
+haryanvi:[['Kaleshi Chori','DG Immortals','night'],['Bad Guy (DG)','DG Immortals','hype'],['Unstoppable','Dhanda Nyoliwala','hype'],['Choudhar Jaat Ki','Raju Punjabi','hype'],['Mat Chale 61-62 Karti','Mukesh Fouji','hype'],['DC Ki Saali','Sharvan Balambhiya','fresh'],['Rukka Pdgya','Pawan Pilania','fresh'],['52 Gaj Ka Daman','Renuka Panwar','hype'],['Teri Aakhya Ka Yo Kajal','Sapna Choudhary','retro']]
+};
+function curated(){
+  const b=CUR[$('lang').value];if(!b)return[];
+  return shuffle(b.filter(x=>x[2]===st.vibe)).concat(shuffle(b.filter(x=>x[2]!==st.vibe)).slice(0,6)).map(x=>({title:x[0],artist:x[1]}));
 }
 
 // ---- the crate ----
@@ -256,9 +385,10 @@ async function dig(){
   st.songs=[];drawList('Digging…');
   let songs=[],msg='';
   if(ON){
-    try{const d=await(await fetch(API+'/songs?vibe='+st.vibe+'&depth='+st.depth+'&lang='+encodeURIComponent($('lang').value))).json();songs=d.songs||[];if(d.error)msg=d.error}
+    try{const d=await(await fetch(API+'/songs?vibe='+st.vibe+'&tags='+encodeURIComponent((st.mood?st.mood.t:[]).join(','))+'&depth='+st.depth+'&lang='+encodeURIComponent($('lang').value))).json();songs=d.songs||[];if(d.error)msg=d.error}
     catch(e){msg='Couldn’t reach the song service.'}
   }
+  const cu=curated();if(cu.length){const seen=new Set(cu.map(x=>x.title+x.artist));songs=interleave(cu.slice(0,12),songs.filter(x=>!seen.has(x.title+x.artist)))}
   if(!songs.length){songs=(SEED[st.vibe]||[]).map(s=>{const p=s.split('~');return{title:p[0],artist:p[1]}});
     msg=ON?'Showing a starter crate instead. '+msg:'Showing a starter crate. Connect the song service for endless digging.'}
   st.songs=songs;st.note=msg;drawList();
@@ -296,9 +426,9 @@ function sticker(){
 }
 async function play(s){
   st.cur=s;st.dur=0;st.fixed=false;document.body.classList.remove('playing');setArt('');$('pp').disabled=true;$('pp').textContent='Pause';
-  $('dock').classList.add('on');$('pt').textContent=s.title;$('pa').textContent=s.artist;$('rg').disabled=true;$('rc').textContent='';$('re').textContent='';
+  $('dock').classList.add('on');$('frame').classList.add('pl');$('pt').textContent=s.title;$('pa').textContent=s.artist;$('rg').disabled=true;$('rc').textContent='';$('re').textContent='';
   $('msg').textContent=ON?'Loading…':'';sticker();heart();drawList();drawStash();
-  if(matchMedia('(max-width:879px)').matches)$('dock').scrollIntoView({behavior:'smooth',block:'start'});
+  if(matchMedia('(max-width:879px)').matches)$('frame').scrollIntoView({behavior:'smooth',block:'start'});
   if(!ON){findArt(s,null);fallback(s,'Playback needs the song service.');return}
   try{
     const k=s.artist+'|'+s.title;let id=vc[k];
@@ -346,15 +476,15 @@ function handle(f){
   const url=URL.createObjectURL(f),im=new Image();
   im.onload=()=>{
     st.img=im;$('photo').src=url;$('frame').classList.add('on');$('hint').classList.add('on');$('sv').disabled=false;
-    st.vibe=analyze(im);drawTabs();newQuote();drawPal(palette(im));sticker();dig();
+    drawPal(palette(im));st.feat=scan(im);startQuiz();sticker();
   };
   im.src=url;
 }
 $('file').onchange=e=>handle(e.target.files[0]);
 $('chg').onclick=()=>$('file').click();
-$('frame').addEventListener('click',e=>{if(st.img&&!e.target.closest('label'))newQuote()});
+$('frame').addEventListener('click',e=>{if(st.img&&!e.target.closest('label')&&!e.target.closest('#dock'))newQuote()});
 $('dig').onclick=dig;
-$('lang').onchange=()=>{if(st.img)newQuote();dig()};
+$('lang').onchange=()=>{if(st.img&&st.mood){newQuote();dig()}};
 ['dragover','dragenter'].forEach(t=>$('frame').addEventListener(t,e=>e.preventDefault()));
 $('frame').addEventListener('drop',e=>{e.preventDefault();handle(e.dataTransfer.files[0])});
 
