@@ -193,12 +193,14 @@ hype:['Float like a butterfly, sting like a bee.|Muhammad Ali','Mogambo khush hu
 retro:['Here’s looking at you, kid.|Casablanca, 1942','Anand mara nahi, Anand marte nahi.|Anand, 1971','Rishte mein toh hum tumhare baap lagte hain, naam hai Shahenshah.|Shahenshah, 1988','Mere paas maa hai.|Deewaar, 1975','Don ko pakadna mushkil hi nahi, namumkin hai.|Don','I’m gonna make him an offer he can’t refuse.|The Godfather, 1972'],
 dreamy:['We are such stuff as dreams are made on.|William Shakespeare, The Tempest','Once you’ve met someone, you never really forget them.|Spirited Away, 2001','Love is the one thing that transcends time and space.|Interstellar, 2014','I am rooted, but I flow.|Virginia Woolf, The Waves','Your pain is the breaking of the shell that encloses your understanding.|Kahlil Gibran, The Prophet'],
 cinematic:['See you, space cowboy.|Cowboy Bebop','Do or do not. There is no try.|The Empire Strikes Back, 1980','I’ll be back.|The Terminator, 1984','Houston, we have a problem.|Apollo 13, 1995','Life is like a box of chocolates.|Forrest Gump, 1994','All those moments will be lost in time, like tears in rain.|Blade Runner, 1982'],
+social:['Injustice anywhere is a threat to justice everywhere.|Martin Luther King Jr.','The arc of the moral universe is long, but it bends toward justice.|Martin Luther King Jr.','If there is no struggle, there is no progress.|Frederick Douglass','An eye for an eye only ends up making the whole world blind.|Gandhi, 1982'],
+irony:['I can resist everything except temptation.|Oscar Wilde','I refuse to join any club that would have me as a member.|Groucho Marx','Outside of a dog, a book is man’s best friend.|Groucho Marx','Don’t Panic.|Douglas Adams, The Hitchhiker’s Guide to the Galaxy','The reports of my death are greatly exaggerated.|Mark Twain','Nobody’s perfect.|Some Like It Hot, 1959'],
 hi:['Kitne aadmi the?|Sholay, 1975','Mogambo khush hua.|Mr. India, 1987','Main apni favourite hoon.|Jab We Met, 2007','Picture abhi baaki hai mere dost.|Om Shanti Om, 2007','All izz well.|3 Idiots, 2009'],
 south:['Naan oru thadava sonna nooru thadava sonna maadhiri.|Baashha, 1995','Pushpa naam sunke flower samjhe kya? Flower nahi, fire hai main.|Pushpa: The Rise, 2021']
 };
 const QLANG={hindi:'hi',punjabi:'hi',tamil:'south',telugu:'south',malayalam:'south'};
 
-const st={mood:null,cands:[],feat:null,qa:{axes:{},n:0,lang:false,depth:false},vibe:'moody',depth:1,songs:[],cur:null,img:null,q:null,acc:[255,200,61],win:15,t0:0,dur:0,yp:null,tk:0,fixed:false};
+const st={scanTk:0,cues:null,mood:null,cands:[],feat:null,qa:{axes:{},n:0,lang:false,depth:false},vibe:'moody',depth:1,songs:[],cur:null,img:null,q:null,acc:[255,200,61],win:15,t0:0,dur:0,yp:null,tk:0,fixed:false};
 const F=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const shuffle=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
@@ -260,53 +262,110 @@ function newQuote(){
   el.classList.remove('f');void el.offsetWidth;el.classList.add('f');
 }
 
+// ---- seeing people, objects, faces, poses and gestures (runs on your device, nothing is uploaded) ----
+const MP='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14',GS='https://storage.googleapis.com/mediapipe-models/';
+let vis=null;
+function mp(){
+  if(!vis)vis=(async()=>{
+    const m=await import(MP+'/vision_bundle.mjs'),fs=await m.FilesetResolver.forVisionTasks(MP+'/wasm');
+    const mk=(C,p,o)=>C.createFromOptions(fs,{baseOptions:{modelAssetPath:GS+p},runningMode:'IMAGE',...o});
+    return{m,mk,obj:await mk(m.ObjectDetector,'object_detector/efficientdet_lite0/float16/1/efficientdet_lite0.tflite',{scoreThreshold:.4,maxResults:20})};
+  })().catch(()=>null);
+  return vis;
+}
+async function detect(img){
+  const V=await Promise.race([mp(),new Promise(r=>setTimeout(()=>r(null),40000))]);if(!V)return null;
+  try{
+    const W=img.naturalWidth,H=img.naturalHeight,ds=V.obj.detect(img).detections,nm=d=>d.categories[0].categoryName;
+    const p=ds.filter(d=>nm(d)==='person').map(d=>({h:d.boundingBox.height/H,w:d.boundingBox.width/W})).sort((x,y)=>y.h*y.w-x.h*x.w);
+    const c={persons:p.length,big:p[0]?p[0].h:0,objs:[...new Set(ds.map(nm).filter(n=>n!=='person'))],gest:[],face:null,arms:false};
+    if(c.persons){
+      // faces, hands and pose load only when a person is in the photo; each is optional
+      await Promise.all([
+        (async()=>{V.face=V.face||await V.mk(V.m.FaceLandmarker,'face_landmarker/face_landmarker/float16/1/face_landmarker.task',{outputFaceBlendshapes:true,numFaces:3});
+          const b=(V.face.detect(img).faceBlendshapes[0]||{categories:[]}).categories,g=n=>(b.find(x=>x.categoryName===n)||{score:0}).score;
+          if(b.length)c.face={smile:(g('mouthSmileLeft')+g('mouthSmileRight'))/2,smirk:Math.abs(g('mouthSmileLeft')-g('mouthSmileRight')),frown:(g('mouthFrownLeft')+g('mouthFrownRight'))/2,sad:g('browInnerUp'),closed:(g('eyeBlinkLeft')+g('eyeBlinkRight'))/2}})().catch(()=>{}),
+        (async()=>{V.hands=V.hands||await V.mk(V.m.GestureRecognizer,'gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task',{numHands:2});
+          c.gest=[...new Set(V.hands.recognize(img).gestures.flat().map(x=>x.categoryName).filter(n=>n!=='None'))]})().catch(()=>{}),
+        (async()=>{V.pose=V.pose||await V.mk(V.m.PoseLandmarker,'pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task');
+          const l=V.pose.detect(img).landmarks[0];if(l)c.arms=[[15,11],[16,12]].some(([w,s])=>l[w].visibility>.5&&l[w].y<l[s].y)})().catch(()=>{})
+      ]);
+    }
+    return c;
+  }catch(e){return null}
+}
+// detected object -> moods it points to
+const CUE={car:['newbuy','newplace'],motorcycle:['newbuy','newplace'],bicycle:['newbuy','newplace'],'cell phone':['newbuy','aesself'],laptop:['newbuy','achieve','grind'],handbag:['newbuy','glow'],tie:['achieve','glow'],tv:['newbuy'],backpack:['newplace'],suitcase:['newplace','home'],airplane:['newplace'],boat:['newplace','scenery'],train:['newplace'],bus:['newplace'],bench:['peace','contemplate','scenery'],'potted plant':['aesplace','peace'],vase:['aesplace'],cup:['aesplace','peace','company'],'wine glass':['company','festival','newbuy'],bottle:['festival','company'],cake:['festival','achieve','grateful'],'dining table':['company','aesplace'],couch:['aesplace','peace','regret'],bed:['regret','contemplate','miss'],book:['deep','contemplate','achieve'],umbrella:['contemplate','scenery'],bird:['scenery','peace'],dog:['peace','company','love'],cat:['peace','aesplace'],kite:['scenery','festival'],clock:['regret','deep']};
+const GEST={Thumb_Up:['achieve','grateful','newbuy'],Victory:['achieve','company','newplace','festival'],Closed_Fist:['grind','achieve','social'],Open_Palm:['grateful','fresh'],Pointing_Up:['achieve','social','deep'],ILoveYou:['love','company']};
+function cueScore(m){
+  const c=st.cues;if(!c)return 0;const f=c.face||{},id=m.id,has=l=>l.includes(id);let s=0;
+  c.objs.forEach(o=>{if((CUE[o]||[]).includes(id))s+=.3});s=Math.min(s,.6);
+  if(f.smile>.5&&has(['company','love','achieve','grateful','festival','glow']))s+=.5;
+  if(c.persons>=2&&f.smile>.5&&has(['company','festival']))s+=.3;
+  if((f.frown>.3||(f.sad>.4&&f.smile<.2))&&has(['regret','deep','remember','miss','social']))s+=.5;
+  if(f.smirk>.25&&has(['irony']))s+=.7;
+  if(c.persons&&f.smile<.15&&f.frown<.15&&has(['deep','contemplate','aesself','irony']))s+=.3;
+  if(f.closed>.6&&has(['peace','contemplate','grateful']))s+=.4;
+  c.gest.forEach(g=>{if((GEST[g]||[]).includes(id))s+=.5});
+  if(c.arms&&has(['achieve','festival','newplace','glow']))s+=.5;
+  if(!c.persons&&!c.objs.length&&has(['scenery','aesplace','newplace','peace']))s+=.5;
+  if(c.persons&&c.big>.5&&has(['aesself','glow']))s+=.3;
+  if(c.persons>=4&&has(['social','festival','company']))s+=.3;
+  return s;
+}
+function seenText(){
+  const c=st.cues;if(!c)return '';const f=c.face||{};
+  const l=(c.persons?[c.persons===1?'one person':c.persons===2?'two people':c.persons+' people']:[])
+    .concat(f.smirk>.25?['a smirk']:f.smile>.5?['a smile']:f.frown>.3?['a frown']:[],c.arms?['arms up']:[],c.gest.map(g=>g.replace('_',' ').toLowerCase()),c.objs.slice(0,3));
+  return l.length?' I can see '+l.join(', ')+'.':'';
+}
+async function lookQuiz(im){
+  const tk=++st.scanTk,box=$('quiz');box.hidden=false;box.innerHTML='';
+  box.append(el('p','qn','Reading your photo'),el('h3','cond','Looking at faces, poses and objects…'),el('p','qn','The first time takes a while.'));
+  $('crate').classList.add('q');$('mood').hidden=true;
+  const c=await detect(im);if(tk!==st.scanTk)return;
+  st.cues=c;startQuiz();
+}
+$('file').addEventListener('click',()=>{mp()});
+
 // ---- real moods, the photo reader and the quiz ----
 // a = [energy, crowd, happiness, night, romance], all 0 to 1. g links to quote and starter-song groups. t = search tags.
 const MOODS=[
-{id:'drive',n:'3 a.m. drive',g:'night',a:[.45,0,.4,1,.2],t:['synthwave','darkwave','night drive','electronic']},
-{id:'roof',n:'Rooftop, chai, nobody home',g:'golden',a:[.2,.1,.55,.5,.1],t:['indie folk','lo-fi','acoustic','chill']},
-{id:'rain',n:'Rain on the window',g:'moody',a:[.15,0,.3,.6,.3],t:['sadcore','slowcore','ambient','rainy day']},
-{id:'hostel',n:'Hostel corridor, lights out',g:'night',a:[.3,.3,.45,1,0],t:['lo-fi','bedroom pop','indie','alternative']},
-{id:'over',n:'Almost over you',g:'moody',a:[.3,0,.2,.6,.6],t:['heartbreak','sad','indie pop','singer-songwriter']},
-{id:'soft',n:'Soft launch',g:'fresh',a:[.4,.2,.85,.2,.9],t:['dream pop','bedroom pop','romantic','indie pop']},
-{id:'locked',n:'Locked in',g:'hype',a:[.85,0,.5,.5,0],t:['phonk','hip-hop','rage','trap']},
-{id:'train',n:'Train window, long way home',g:'cinematic',a:[.2,0,.5,.4,.1],t:['post-rock','ambient','instrumental','neoclassical']},
-{id:'gold',n:'Golden hour, nothing to prove',g:'golden',a:[.4,.3,.85,.2,.2],t:['yacht rock','tropicalia','jangle pop','sunshine pop']},
-{id:'dress',n:'Dressed up, nowhere to go',g:'retro',a:[.5,.1,.5,.7,.2],t:['italo disco','new wave','synthpop','disco']},
-{id:'dhaba',n:'Dhaba on the highway',g:'golden',a:[.55,.5,.7,.5,0],t:['folk','road trip','world','desi']},
-{id:'film',n:'Old film, new feelings',g:'retro',a:[.3,.1,.55,.4,.7],t:['city pop','soul','vintage','60s']},
-{id:'chaos',n:'Friends, no plans, good chaos',g:'fresh',a:[.75,.9,.9,.5,0],t:['indie rock','garage rock','surf rock','party']},
-{id:'mirror',n:'Quiet confidence, loud fit',g:'hype',a:[.6,0,.75,.5,.1],t:['alt hip hop','funk','boogie','alternative r&b']},
-{id:'wedding',n:'Wedding season',g:'hype',a:[.9,1,.95,.5,.2],t:['bhangra','dance','dancehall','party']},
-{id:'crowd',n:'Lonely in a crowd',g:'moody',a:[.35,.8,.2,.8,.1],t:['shoegaze','post-punk','indie rock','alternative']},
-{id:'sunday',n:'Sunday reset',g:'dreamy',a:[.15,0,.75,.1,0],t:['bossa nova','chillwave','jazz','ambient pop']},
-{id:'villain',n:'Villain arc',g:'hype',a:[.8,.1,.15,.9,0],t:['dark ambient','drill','industrial','rage']},
-{id:'miss',n:'Missing someone',g:'dreamy',a:[.2,0,.25,.6,.7],t:['dream pop','sad','shoegaze','slowcore']},
-{id:'walk',n:'Main character, walking home',g:'cinematic',a:[.6,.1,.8,.5,.1],t:['indie pop','synthpop','art pop','electropop']},
-{id:'monsoon',n:'Monsoon evening',g:'dreamy',a:[.25,.2,.65,.3,.4],t:['bossa nova','folk','acoustic','lo-fi']}
+{id:'grateful',n:'Grateful',g:'golden',a:[.3,.4,.9,0,.5],t:['gospel','soul','acoustic','uplifting']},
+{id:'newbuy',n:'Flexing something new',g:'hype',a:[.8,.1,.9,.3,.5],t:['hip-hop','trap','funk','boogie']},
+{id:'achieve',n:'Flexing an achievement',g:'hype',a:[.85,.3,.95,0,1],t:['epic','cinematic','hip-hop','orchestral']},
+{id:'company',n:'Happy in good company',g:'fresh',a:[.65,.8,.95,0,.5],t:['indie pop','surf rock','funk','good vibes']},
+{id:'newplace',n:'Somewhere new',g:'cinematic',a:[.55,.3,.8,0,.2],t:['world','indie folk','road trip','folk']},
+{id:'scenery',n:'Just the view',g:'dreamy',a:[.2,0,.7,0,0],t:['ambient','post-rock','instrumental','neoclassical']},
+{id:'aesself',n:'Aesthetic me',g:'fresh',a:[.4,0,.7,0,1],t:['dream pop','bedroom pop','alternative r&b','art pop']},
+{id:'aesplace',n:'Aesthetic place',g:'golden',a:[.25,0,.7,0,.1],t:['bossa nova','jazz','lo-fi','chillwave']},
+{id:'irony',n:'Sarcasm and irony',g:'irony',a:[.6,.2,.4,1,.5],t:['indie rock','new wave','art punk','folk punk']},
+{id:'social',n:'Something’s wrong out there',g:'social',a:[.7,.4,.15,.3,0],t:['protest','punk','conscious hip hop','folk']},
+{id:'deep',n:'Deep thoughts',g:'dreamy',a:[.2,0,.4,0,.5],t:['singer-songwriter','post-rock','folk','ambient']},
+{id:'regret',n:'Regret',g:'moody',a:[.25,0,.1,0,.5],t:['sadcore','slowcore','heartbreak','sad']},
+{id:'contemplate',n:'Contemplation',g:'dreamy',a:[.15,0,.5,0,.4],t:['ambient','drone','neoclassical','meditation']},
+{id:'remember',n:'Remembering someone',g:'moody',a:[.15,.1,.1,0,.4],t:['piano','neoclassical','folk','sad']},
+{id:'miss',n:'Missing someone',g:'dreamy',a:[.2,0,.25,0,.6],t:['dream pop','shoegaze','slowcore','sad']},
+{id:'home',n:'Missing home',g:'retro',a:[.25,.2,.35,0,.2],t:['folk','acoustic','nostalgia','world']},
+{id:'fresh',n:'Fresh start',g:'golden',a:[.55,.2,.8,0,.6],t:['indie pop','uplifting','synthpop','dream pop']},
+{id:'glow',n:'Glow-up',g:'hype',a:[.7,.2,.85,.2,1],t:['alternative r&b','pop','funk','dance']},
+{id:'festival',n:'Celebration',g:'hype',a:[.9,.95,.95,0,.3],t:['dance','party','dancehall','funk']},
+{id:'peace',n:'Peace and quiet',g:'dreamy',a:[.1,0,.7,0,.3],t:['ambient','folk','acoustic','chill']},
+{id:'grind',n:'Grinding',g:'hype',a:[.8,0,.5,0,.6],t:['phonk','hip-hop','rage','trap']},
+{id:'love',n:'In love',g:'fresh',a:[.45,.5,.9,0,.3],t:['romantic','dream pop','soul','bossa nova']}
 ];
-const AXI={e:0,s:1,m:2,n:3,r:4};
+// axes: e energy, s company, m how light it feels, i irony, f focus (view to self), each 0 to 1
+const AXI={e:0,s:1,m:2,i:3,f:4};
 const QS={
-e:{q:'How does this moment move?',o:[['Slow, barely moving',.15],['A steady walk',.5],['Can’t sit still',.9]]},
-s:{q:'Who’s in the room?',o:[['Just me',.05],['One or two people',.5],['A whole crowd',.95]]},
-m:{q:'Where’s your head at?',o:[['Hurting a little',.15],['Somewhere in between',.5],['Genuinely good',.9]]},
-n:{q:'What time is it, really?',o:[['Past midnight',1],['Evening',.55],['Broad daylight',.1]]},
-r:{q:'Is anyone on your mind?',o:[['No one',0],['Someone, quietly',.5],['Yes. Loudly.',1]]},
+e:{q:'How loud is this post?',o:[['Quiet, almost a whisper',.15],['Warm and steady',.5],['Loud. Look at me.',.9]]},
+s:{q:'Who’s with you in this?',o:[['No one',.05],['One person',.5],['A whole group',.95]]},
+m:{q:'How does it feel?',o:[['Heavy',.15],['Mixed',.5],['Light and good',.9]]},
+i:{q:'Serious or kidding?',o:[['Dead serious',0],['A bit of both',.5],['Sarcastic, obviously',1]]},
+f:{q:'What is the photo really about?',o:[['The place, the view',0],['A thing, or someone with me',.5],['Me',1]]},
 lang:{q:'What should it sound like?',o:[['Hindi','hindi'],['Punjabi','punjabi'],['Haryanvi','haryanvi'],['English',''],['Surprise me','']]},
 depth:{q:'How deep should I dig?',o:[['Safe, people know it',0],['A deep cut',1],['Basement. Nobody knows it.',2]]}
 };
-function baseScore(m,f){
-  const a=m.a;let s=-(Math.abs(f.E-a[0])+1.2*Math.abs(f.M-a[2])+1.3*Math.abs(f.N-a[3])+.5*Math.abs(f.R-a[4]));
-  const has=l=>l.includes(m.id);
-  if(has(['gold','roof','monsoon','film']))s+=f.orange*1.4;
-  if(has(['rain','train','miss','monsoon']))s+=f.blue*1.1;
-  if(has(['drive','villain','hostel','dress','crowd']))s+=f.neon*1.4;
-  if(has(['chaos','mirror','wedding']))s+=f.flash*1.2;
-  if(has(['sunday','roof','dhaba','gold']))s+=f.green*.9;
-  if(has(['film','over']))s+=f.bw*.9;
-  if(has(['chaos','wedding','crowd','dhaba']))s+=f.busy*.6;
-  return s;
-}
+function baseScore(m,f){return -.6*(Math.abs(f.E-m.a[0])+1.2*Math.abs(f.M-m.a[2]))+cueScore(m)}
 function ranked(){
   return st.cands.map(c=>{let sc=c.base;for(const k in st.qa.axes)sc-=1.6*Math.abs(c.m.a[AXI[k]]-st.qa.axes[k]);return{m:c.m,s:sc}}).sort((x,y)=>y.s-x.s);
 }
@@ -316,7 +375,7 @@ function nextQ(){
     const r=ranked();
     if(!(done>=1&&r[0].s-r[1].s>.5)){
       let best=null,bs=.25;
-      for(const k of ['e','s','m','n','r']){if(k in a.axes)continue;const v=st.cands.map(c=>c.m.a[AXI[k]]),sp=Math.max(...v)-Math.min(...v);if(sp>bs){bs=sp;best=k}}
+      for(const k of ['e','s','m','i','f']){if(k in a.axes)continue;const v=st.cands.map(c=>c.m.a[AXI[k]]),sp=Math.max(...v)-Math.min(...v);if(sp>bs){bs=sp;best=k}}
       if(best)return best;
     }
   }
@@ -328,7 +387,7 @@ function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=nu
 function showQ(){
   const k=nextQ(),box=$('quiz');if(!k)return finish();
   box.hidden=false;box.innerHTML='';const q=QS[k];
-  box.append(el('p','qn','Looks like '+st.cands.map(c=>c.m.n).join(', or ')+'. Question '+(st.qa.n+1)+' of up to 5.'),el('h3','cond',q.q));
+  box.append(el('p','qn','Looks like '+st.cands.map(c=>c.m.n).join(', or ')+'.'+seenText()+' Question '+(st.qa.n+1)+' of up to 5.'),el('h3','cond',q.q));
   const o=el('div','opts');
   q.o.forEach(([l,v])=>{const b=el('button','opt',l);b.onclick=()=>{
     if(k==='lang'){st.qa.lang=true;$('lang').value=v}else if(k==='depth'){st.qa.depth=true;st.depth=v}else st.qa.axes[k]=v;
@@ -340,13 +399,19 @@ function showQ(){
 function finish(){
   const r=ranked();st.mood=r[0].m;st.vibe=st.mood.g;
   $('quiz').hidden=true;$('crate').classList.remove('q');
-  $('mn').textContent=st.mood.n;$('mc').textContent='Close calls: '+r.slice(1).map(x=>x.m.n).join(', ');$('mood').hidden=false;
+  $('mn').textContent=st.mood.n;$('mc').textContent='Close calls: '+r.slice(1).map(x=>x.m.n).join(', ')+'.'+seenText();$('mood').hidden=false;
   const sel=$('msel');sel.innerHTML='';MOODS.forEach(m=>{const o=el('option',null,m.n);o.value=m.id;sel.appendChild(o)});sel.value=st.mood.id;
   newQuote();drawTabs();dig();
 }
 function startQuiz(){
   st.cands=MOODS.map(m=>({m,base:baseScore(m,st.feat)})).sort((x,y)=>y.base-x.base).slice(0,3);
   st.qa={axes:{},n:0,lang:false,depth:false};
+  const cu=st.cues,A=st.qa.axes;
+  if(cu){ // what the photo already tells us, so we don't ask
+    if(cu.persons)A.s=cu.persons>=3?.95:cu.persons===2?.5:.08;
+    if(cu.persons&&cu.big>.45)A.f=1;else if(!cu.persons&&!cu.objs.length)A.f=0;
+    if(cu.face)if(cu.face.smile>.5)A.m=.9;else if(cu.face.frown>.3)A.m=.2;
+  }
   $('crate').classList.add('q');$('mood').hidden=true;showQ();
 }
 $('msel').onchange=e=>{const m=MOODS.find(x=>x.id===e.target.value);if(!m)return;st.mood=m;st.vibe=m.g;$('mn').textContent=m.n;newQuote();dig()};
@@ -360,7 +425,7 @@ haryanvi:[['Kaleshi Chori','DG Immortals','night'],['Bad Guy (DG)','DG Immortals
 };
 function curated(){
   const b=CUR[$('lang').value];if(!b)return[];
-  return shuffle(b.filter(x=>x[2]===st.vibe)).concat(shuffle(b.filter(x=>x[2]!==st.vibe)).slice(0,6)).map(x=>({title:x[0],artist:x[1]}));
+  return shuffle(b.filter(x=>x[2]===st.vibe)).concat(shuffle(b.filter(x=>x[2]!==st.vibe)).slice(0,12)).map(x=>({title:x[0],artist:x[1]}));
 }
 
 // ---- the crate ----
@@ -389,7 +454,7 @@ async function dig(){
     catch(e){msg='Couldn’t reach the song service.'}
   }
   const cu=curated();if(cu.length){const seen=new Set(cu.map(x=>x.title+x.artist));songs=interleave(cu.slice(0,12),songs.filter(x=>!seen.has(x.title+x.artist)))}
-  if(!songs.length){songs=(SEED[st.vibe]||[]).map(s=>{const p=s.split('~');return{title:p[0],artist:p[1]}});
+  if(!songs.length){songs=(SEED[st.vibe]||SEED.moody).map(s=>{const p=s.split('~');return{title:p[0],artist:p[1]}});
     msg=ON?'Showing a starter crate instead. '+msg:'Showing a starter crate. Connect the song service for endless digging.'}
   st.songs=songs;st.note=msg;drawList();
 }
@@ -476,7 +541,7 @@ function handle(f){
   const url=URL.createObjectURL(f),im=new Image();
   im.onload=()=>{
     st.img=im;$('photo').src=url;$('frame').classList.add('on');$('hint').classList.add('on');$('sv').disabled=false;
-    drawPal(palette(im));st.feat=scan(im);startQuiz();sticker();
+    drawPal(palette(im));st.feat=scan(im);st.cues=null;lookQuiz(im);sticker();
   };
   im.src=url;
 }
