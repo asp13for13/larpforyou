@@ -6,20 +6,28 @@
 <title>larp my vibe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:ital,wght@0,400;1,400;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:ital,wght@0,400;1,400;1,600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#1B2A6B;--bg2:#22348A;--paper:#EEF1F8;--sun:#FFC83D;--ink:#0E1535;--mute:#A9B4E0;--line:rgba(238,241,248,.22);--acc:#FFC83D;--acc-ink:#0E1535}
+:root{--bg:#1B1034;--bg2:#2A1B4D;--paper:#F4EEE3;--sun:#FF8A4C;--ink:#1B1034;--mute:#B8A9D9;--line:rgba(244,238,227,.24);--acc:#FF8A4C;--acc-ink:#1B1034}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--paper);font:400 16px/1.5 "Archivo",system-ui,sans-serif}
+body{margin:0;color:var(--paper);font:400 16px/1.5 "Archivo",system-ui,sans-serif;position:relative;overflow-x:hidden;min-height:100vh;
+background:linear-gradient(#5BA7D4 0,#A9D6EA 170px,#F7D8B6 310px,#7A4A86 470px,#1B1034 660px) no-repeat,#1B1034}
+/* a daytime sky over a night street, and a checkered floor going nowhere */
+body::before{content:"";position:absolute;left:-10%;right:-10%;top:0;height:380px;pointer-events:none;z-index:-1;filter:blur(7px);opacity:.95;animation:drift 120s linear infinite alternate;
+background:radial-gradient(ellipse 150px 42px at 14% 96px,#fff 62%,transparent 66%),radial-gradient(ellipse 110px 36px at 20% 112px,#fff 62%,transparent 66%),radial-gradient(ellipse 210px 56px at 42% 150px,#fff 62%,transparent 66%),radial-gradient(ellipse 150px 44px at 72% 76px,#fff 62%,transparent 66%),radial-gradient(ellipse 120px 34px at 78% 92px,#fff 62%,transparent 66%),radial-gradient(ellipse 230px 58px at 92% 190px,#fff 62%,transparent 66%)}
+@keyframes drift{to{transform:translateX(-140px)}}
+body::after{content:"";position:fixed;left:-30%;right:-30%;bottom:0;height:34vh;pointer-events:none;z-index:-1;opacity:.2;transform:perspective(320px) rotateX(64deg);transform-origin:50% 100%;
+background:conic-gradient(#2A1B4D 25%,#F4EEE3 0 50%,#2A1B4D 0 75%,#F4EEE3 0) 0 0/100px 100px;-webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000)}
 button,select,input{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--sun);outline-offset:2px}
-.cond{font-stretch:62%;font-variation-settings:"wdth" 62;font-weight:900;letter-spacing:-.005em}
+.cond{font-family:"Syne","Archivo",sans-serif;font-weight:800;letter-spacing:-.02em}
 header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:24px clamp(16px,4vw,48px) 0;max-width:1180px;margin:0 auto}
-.mark{font-size:clamp(2.4rem,7vw,4rem);line-height:.85;margin:0}
-.tagline{margin:0;color:var(--mute)}
+.mark{font-size:clamp(2rem,6vw,3.2rem);line-height:.9;margin:0;color:var(--ink)}
+.tagline{margin:0;color:#2A1B4D;font-style:italic;font-family:"Newsreader",Georgia,serif;font-size:1.1rem}
+#eye{flex:none;margin-left:auto}
 main{display:grid;gap:40px;padding:30px clamp(16px,4vw,48px) 80px;max-width:1180px;margin:0 auto}
 @media(min-width:880px){main{grid-template-columns:minmax(300px,400px) 1fr;gap:64px;align-items:start}#stage{position:sticky;top:20px}}
-.frame{position:relative;width:min(100%,400px);aspect-ratio:9/16;background:var(--paper);color:var(--ink);box-shadow:10px 10px 0 var(--acc);overflow:hidden;margin-bottom:18px;transition:box-shadow .25s}
+.frame{animation:float 8s ease-in-out infinite;position:relative;width:min(100%,400px);aspect-ratio:9/16;background:var(--paper);color:var(--ink);box-shadow:10px 10px 0 var(--acc);overflow:hidden;margin-bottom:18px;transition:box-shadow .25s}
 .frame.on{cursor:pointer}
 .drop{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;padding:24px;cursor:pointer}
 .drop .big{font-size:clamp(3.6rem,13vw,5rem);line-height:.86}
@@ -33,6 +41,10 @@ main{display:grid;gap:40px;padding:30px clamp(16px,4vw,48px) 80px;max-width:1180
 #quote p{margin:0 0 10px;font:italic 400 1.5rem/1.22 "Newsreader",Georgia,serif}
 #quote cite{font-style:normal;font-size:.82rem;color:var(--acc);font-weight:600;filter:brightness(1.25)}
 #quote.f{animation:swap .28s ease-out}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-.5deg)}50%{transform:translateY(-12px) rotate(.5deg)}}
+.frame:hover,.frame.pl{animation-play-state:paused}
+#crate{background:rgba(27,16,52,.9);padding:22px;border-radius:30px 6px 30px 6px}
+.btn{border-radius:999px}
 @keyframes swap{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 #sticker{position:absolute;left:16px;top:20px;background:var(--acc);color:var(--acc-ink);padding:9px 14px 9px 10px;transform:rotate(-3deg);max-width:82%;display:none;align-items:center;gap:10px;transition:background .25s}
 #sticker b{display:block;font-weight:800;line-height:1.15}
@@ -110,7 +122,8 @@ ul.songs .empty{padding:12px 6px;color:var(--mute)}
 <body>
 <header>
   <h1 class="mark cond">larp my vibe</h1>
-  <p class="tagline">A photo in. A song almost nobody posts out.</p>
+  <p class="tagline">A photo in. A song out. Reality is optional.</p>
+  <svg id="eye" viewBox="0 0 120 70" width="92" aria-hidden="true"><ellipse cx="60" cy="35" rx="56" ry="30" fill="#fff" stroke="#1B1034" stroke-width="3"/><g id="iris"><circle cx="60" cy="35" r="19" fill="#FF8A4C"/><circle cx="60" cy="35" r="9" fill="#1B1034"/></g></svg>
 </header>
 <main>
   <section id="stage" aria-label="Your story">
@@ -152,7 +165,7 @@ ul.songs .empty{padding:12px 6px;color:var(--mute)}
     <div class="row aft"><span class="lab">How deep</span><span id="depth"></span></div>
     <div class="row aft"><span class="lab">Language</span>
       <select id="lang" aria-label="Song language">
-        <option value="">Any</option><option value="hindi">Hindi</option><option value="punjabi">Punjabi</option><option value="haryanvi">Haryanvi</option><option value="tamil">Tamil</option><option value="telugu">Telugu</option><option value="malayalam">Malayalam</option><option value="bengali">Bengali</option><option value="japanese">Japanese</option><option value="korean">Korean</option><option value="spanish">Spanish</option><option value="portuguese">Portuguese</option><option value="french">French</option><option value="arabic">Arabic</option><option value="turkish">Turkish</option><option value="italian">Italian</option><option value="instrumental">Instrumental</option>
+        <option value="">Any</option><option value="english">English</option><option value="hindi">Hindi</option><option value="punjabi">Punjabi</option><option value="haryanvi">Haryanvi</option><option value="tamil">Tamil</option><option value="telugu">Telugu</option><option value="malayalam">Malayalam</option><option value="bengali">Bengali</option><option value="japanese">Japanese</option><option value="korean">Korean</option><option value="spanish">Spanish</option><option value="portuguese">Portuguese</option><option value="french">French</option><option value="arabic">Arabic</option><option value="turkish">Turkish</option><option value="italian">Italian</option><option value="instrumental">Instrumental</option>
       </select>
     </div>
 
@@ -169,7 +182,7 @@ ul.songs .empty{padding:12px 6px;color:var(--mute)}
 <script>
 const API='https://larp-api.anaghpandey13.workers.dev',ON=/^https?:/.test(API);
 const $=id=>document.getElementById(id);
-const DEPTHS=['Common','Deep cut','Basement'];
+const DEPTHS=['Familiar','Sweet spot','Basement'];
 
 // Starter crate, used only when the backend is off. Each line is Title~Artist.
 const SEED={
@@ -185,18 +198,17 @@ cinematic:['Hoppípolla~Sigur Rós','Your Hand in Mine~Explosions in the Sky','A
 
 // Lines are real quotes from films, shows, books and people. Each is text|source.
 const Q={
-night:['All those moments will be lost in time, like tears in rain.|Blade Runner, 1982','I was within and without, simultaneously enchanted and repelled by the inexhaustible variety of life.|F. Scott Fitzgerald, The Great Gatsby','You talkin’ to me?|Taxi Driver, 1976','It’s only after we’ve lost everything that we’re free to do anything.|Fight Club, 1999','Without music, life would be a mistake.|Friedrich Nietzsche','We are all in the gutter, but some of us are looking at the stars.|Oscar Wilde','Why so serious?|The Dark Knight, 2008'],
-moody:['The world breaks everyone, and afterward many are strong at the broken places.|Ernest Hemingway, A Farewell to Arms','So we beat on, boats against the current, borne back ceaselessly into the past.|F. Scott Fitzgerald, The Great Gatsby','A heart’s a heavy burden.|Howl’s Moving Castle, 2004','One must imagine Sisyphus happy.|Albert Camus','Sometimes we forget things if we have no one to tell them to.|The Lunchbox, 2013','Babumoshai, zindagi badi honi chahiye, lambi nahi.|Anand, 1971'],
-golden:['Life moves pretty fast.|Ferris Bueller’s Day Off, 1986','In the midst of winter, I found there was, within me, an invincible summer.|Albert Camus','Yesterday is history, tomorrow is a mystery, but today is a gift.|Kung Fu Panda, 2008','Carpe diem. Seize the day, boys.|Dead Poets Society, 1989','Anyone can cook.|Ratatouille, 2007','Main apni favourite hoon.|Jab We Met, 2007'],
-fresh:['Bade bade deshon mein aisi chhoti chhoti baatein hoti rehti hain.|Dilwale Dulhania Le Jayenge, 1995','All izz well.|3 Idiots, 2009','Be water, my friend.|Bruce Lee','Tussi ja rahe ho? Tussi na jao.|Kuch Kuch Hota Hai, 1998','Anyone can cook.|Ratatouille, 2007','Life moves pretty fast.|Ferris Bueller’s Day Off, 1986'],
-hype:['Float like a butterfly, sting like a bee.|Muhammad Ali','Mogambo khush hua.|Mr. India, 1987','I am the one who knocks.|Breaking Bad','Say my name.|Breaking Bad','By order of the Peaky Blinders.|Peaky Blinders','Kitne aadmi the?|Sholay, 1975','I’m gonna make him an offer he can’t refuse.|The Godfather, 1972','Picture abhi baaki hai mere dost.|Om Shanti Om, 2007'],
-retro:['Here’s looking at you, kid.|Casablanca, 1942','Anand mara nahi, Anand marte nahi.|Anand, 1971','Rishte mein toh hum tumhare baap lagte hain, naam hai Shahenshah.|Shahenshah, 1988','Mere paas maa hai.|Deewaar, 1975','Don ko pakadna mushkil hi nahi, namumkin hai.|Don','I’m gonna make him an offer he can’t refuse.|The Godfather, 1972'],
-dreamy:['We are such stuff as dreams are made on.|William Shakespeare, The Tempest','Once you’ve met someone, you never really forget them.|Spirited Away, 2001','Love is the one thing that transcends time and space.|Interstellar, 2014','I am rooted, but I flow.|Virginia Woolf, The Waves','Your pain is the breaking of the shell that encloses your understanding.|Kahlil Gibran, The Prophet'],
-cinematic:['See you, space cowboy.|Cowboy Bebop','Do or do not. There is no try.|The Empire Strikes Back, 1980','I’ll be back.|The Terminator, 1984','Houston, we have a problem.|Apollo 13, 1995','Life is like a box of chocolates.|Forrest Gump, 1994','All those moments will be lost in time, like tears in rain.|Blade Runner, 1982'],
-social:['Injustice anywhere is a threat to justice everywhere.|Martin Luther King Jr.','The arc of the moral universe is long, but it bends toward justice.|Martin Luther King Jr.','If there is no struggle, there is no progress.|Frederick Douglass','An eye for an eye only ends up making the whole world blind.|Gandhi, 1982'],
-irony:['I can resist everything except temptation.|Oscar Wilde','I refuse to join any club that would have me as a member.|Groucho Marx','Outside of a dog, a book is man’s best friend.|Groucho Marx','Don’t Panic.|Douglas Adams, The Hitchhiker’s Guide to the Galaxy','The reports of my death are greatly exaggerated.|Mark Twain','Nobody’s perfect.|Some Like It Hot, 1959'],
-hi:['Kitne aadmi the?|Sholay, 1975','Mogambo khush hua.|Mr. India, 1987','Main apni favourite hoon.|Jab We Met, 2007','Picture abhi baaki hai mere dost.|Om Shanti Om, 2007','All izz well.|3 Idiots, 2009'],
-south:['Naan oru thadava sonna nooru thadava sonna maadhiri.|Baashha, 1995','Pushpa naam sunke flower samjhe kya? Flower nahi, fire hai main.|Pushpa: The Rise, 2021']
+night:['I was within and without, simultaneously enchanted and repelled by the inexhaustible variety of life.|F. Scott Fitzgerald, The Great Gatsby','The mass of men lead lives of quiet desperation.|Henry David Thoreau, Walden','We tell ourselves stories in order to live.|Joan Didion, The White Album','Without music, life would be a mistake.|Friedrich Nietzsche','Meet me in Montauk.|Eternal Sunshine of the Spotless Mind, 2004','Hello, friend.|Mr. Robot','All those moments will be lost in time, like tears in rain.|Blade Runner, 1982','Sometimes we forget things if we have no one to tell them to.|The Lunchbox, 2013'],
+moody:['The world breaks everyone, and afterward many are strong at the broken places.|Ernest Hemingway, A Farewell to Arms','So we beat on, boats against the current, borne back ceaselessly into the past.|F. Scott Fitzgerald, The Great Gatsby','Life can only be understood backwards; but it must be lived forwards.|Søren Kierkegaard','Blessed are the forgetful, for they get the better even of their blunders.|Nietzsche, in Eternal Sunshine of the Spotless Mind','The past is just a story we tell ourselves.|Samantha, Her, 2013','Remember me. Try your best. Maybe we can.|Clementine, Eternal Sunshine of the Spotless Mind','A heart’s a heavy burden.|Howl’s Moving Castle, 2004','That era has passed. Nothing that belongs to it exists any more.|In the Mood for Love, 2000'],
+golden:['Attention is the rarest and purest form of generosity.|Simone Weil','In the midst of winter, I found there was, within me, an invincible summer.|Albert Camus','Dheere dheere re mana, dheere sab kuchh hoye.|Kabir','You can’t cross the sea merely by standing and staring at the water.|Rabindranath Tagore','Your body is not a temple, it’s an amusement park. Enjoy the ride.|Anthony Bourdain','There is no greater agony than bearing an untold story inside you.|Maya Angelou, I Know Why the Caged Bird Sings','I like things that look like mistakes.|Frances, Frances Ha, 2012'],
+fresh:['I like things that look like mistakes.|Frances, Frances Ha, 2012','Constantly talking isn’t necessarily communicating.|Joel, Eternal Sunshine of the Spotless Mind','Be a goldfish.|Ted Lasso','Meet me in Montauk.|Eternal Sunshine of the Spotless Mind, 2004','Your body is not a temple, it’s an amusement park. Enjoy the ride.|Anthony Bourdain','Main apni favourite hoon.|Geet, Jab We Met, 2007','Everything you see I owe to spaghetti.|Sophia Loren'],
+hype:['Stay hungry. Stay foolish.|Steve Jobs, Stanford, 2005','That’s what the money is for!|Don Draper, Mad Men','Float like a butterfly, sting like a bee.|Muhammad Ali','I am Iron Man.|Tony Stark, Iron Man, 2008','Treat yo self.|Parks and Recreation','If you want to shine like a sun, first burn like a sun.|A. P. J. Abdul Kalam','One child, one teacher, one book, one pen can change the world.|Malala Yousafzai, 2013','Main apni favourite hoon.|Geet, Jab We Met, 2007'],
+retro:['Here’s looking at you, kid.|Casablanca, 1942','Anand mara nahi, Anand marte nahi.|Anand, 1971','Babumoshai, zindagi badi honi chahiye, lambi nahi.|Anand, 1971','That era has passed. Nothing that belongs to it exists any more.|In the Mood for Love, 2000','Everything you see I owe to spaghetti.|Sophia Loren','Time is what we want most, but what we use worst.|William Penn'],
+dreamy:['We are such stuff as dreams are made on.|William Shakespeare, The Tempest','Once you’ve met someone, you never really forget them.|Zeniba, Spirited Away, 2001','Whereof one cannot speak, thereof one must be silent.|Ludwig Wittgenstein','We suffer more often in imagination than in reality.|Seneca','I am rooted, but I flow.|Virginia Woolf, The Waves','Your pain is the breaking of the shell that encloses your understanding.|Kahlil Gibran, The Prophet','We tell ourselves stories in order to live.|Joan Didion, The White Album','Love is the one thing that transcends time and space.|Interstellar, 2014'],
+cinematic:['See you, space cowboy.|Cowboy Bebop','Not all those who wander are lost.|J. R. R. Tolkien, The Fellowship of the Ring','Meet me in Montauk.|Eternal Sunshine of the Spotless Mind, 2004','You can’t cross the sea merely by standing and staring at the water.|Rabindranath Tagore','All those moments will be lost in time, like tears in rain.|Blade Runner, 1982','The past is just a story we tell ourselves.|Samantha, Her, 2013'],
+social:['Injustice anywhere is a threat to justice everywhere.|Martin Luther King Jr.','The arc of the moral universe is long, but it bends toward justice.|Martin Luther King Jr.','If there is no struggle, there is no progress.|Frederick Douglass','They may kill me, but they cannot kill my ideas.|Bhagat Singh','One child, one teacher, one book, one pen can change the world.|Malala Yousafzai, 2013','How dare you?|Greta Thunberg, 2019','I like the religion that teaches liberty, equality and fraternity.|B. R. Ambedkar','An eye for an eye only ends up making the whole world blind.|Gandhi, 1982','I’ll tell you what freedom is to me: no fear.|Nina Simone'],
+irony:['I can resist everything except temptation.|Oscar Wilde','I refuse to join any club that would have me as a member.|Groucho Marx','Ishq ne Ghalib nikamma kar diya, warna hum bhi aadmi the kaam ke.|Mirza Ghalib','Sometimes I’ll start a sentence and I don’t even know where it’s going.|Michael Scott, The Office','The reports of my death are greatly exaggerated.|Mark Twain','Outside of a dog, a book is man’s best friend.|Groucho Marx','Don’t Panic.|Douglas Adams, The Hitchhiker’s Guide to the Galaxy','We were on a break!|Ross, Friends','Nobody’s perfect.|Some Like It Hot, 1959'],
+hi:['Bura jo dekhan main chala, bura na milya koi.|Kabir','Ishq ne Ghalib nikamma kar diya, warna hum bhi aadmi the kaam ke.|Mirza Ghalib','Babumoshai, zindagi badi honi chahiye, lambi nahi.|Anand, 1971','Dheere dheere re mana, dheere sab kuchh hoye.|Kabir']
 };
 const QLANG={hindi:'hi',punjabi:'hi',tamil:'south',telugu:'south',malayalam:'south'};
 
@@ -362,8 +374,8 @@ s:{q:'Who’s with you in this?',o:[['No one',.05],['One person',.5],['A whole g
 m:{q:'How does it feel?',o:[['Heavy',.15],['Mixed',.5],['Light and good',.9]]},
 i:{q:'Serious or kidding?',o:[['Dead serious',0],['A bit of both',.5],['Sarcastic, obviously',1]]},
 f:{q:'What is the photo really about?',o:[['The place, the view',0],['A thing, or someone with me',.5],['Me',1]]},
-lang:{q:'What should it sound like?',o:[['Hindi','hindi'],['Punjabi','punjabi'],['Haryanvi','haryanvi'],['English',''],['Surprise me','']]},
-depth:{q:'How deep should I dig?',o:[['Safe, people know it',0],['A deep cut',1],['Basement. Nobody knows it.',2]]}
+lang:{q:'What should it sound like?',o:[['Hindi','hindi'],['Punjabi','punjabi'],['Haryanvi','haryanvi'],['English','english'],['Surprise me','']]},
+depth:{q:'How well known should it be?',o:[['Familiar',0],['Sweet spot: heard of it, not tired of it',1],['Basement. Nobody knows it.',2]]}
 };
 function baseScore(m,f){return -.6*(Math.abs(f.E-m.a[0])+1.2*Math.abs(f.M-m.a[2]))+cueScore(m)}
 function ranked(){
@@ -428,6 +440,244 @@ function curated(){
   return shuffle(b.filter(x=>x[2]===st.vibe)).concat(shuffle(b.filter(x=>x[2]!==st.vibe)).slice(0,12)).map(x=>({title:x[0],artist:x[1]}));
 }
 
+// Hand-matched crate: semi-popular songs picked because they feel like the mood. Title~Artist, with ~h Hindi or ~p Punjabi.
+const VB={
+grateful:`Falettinme Be Mice Elf Agin~Sly & The Family Stone
+Home~Edward Sharpe & The Magnetic Zeros
+Better Together~Jack Johnson
+Gratitude~Earth, Wind & Fire
+Sunrise~Norah Jones
+Everything Is Everything~Lauryn Hill
+Thank You~Led Zeppelin
+Thank U~Alanis Morissette
+Khwaja Mere Khwaja~A.R. Rahman~h
+Maula Mere Maula~Roop Kumar Rathod~h
+Tu Hi Haqeeqat~Javed Ali~h`,
+newbuy:`Fashion Killa~A$AP Rocky
+Praise the Lord (Da Shine)~A$AP Rocky
+Magnolia~Playboi Carti
+Bank Account~21 Savage
+Ballin’~Mustard
+Tadow~Masego
+Gold~Spandau Ballet
+Money~Pink Floyd
+Nanchaku~Seedhe Maut~h
+Shaktimaan~Seedhe Maut~h
+Elevated~Shubh~p
+Cheques~Shubh~p`,
+achieve:`Hall of Fame~The Script
+Till I Collapse~Eminem
+Started from the Bottom~Drake
+Power~Kanye West
+Dreams and Nightmares~Meek Mill
+Rise~Katy Perry
+Light Em Up~Fall Out Boy
+Time~Hans Zimmer
+Now We Are Free~Hans Zimmer & Lisa Gerrard
+Zinda~Siddharth Mahadevan~h
+Dangal~Daler Mehndi~h
+Lakshya~Shankar Mahadevan~h`,
+company:`Float On~Modest Mouse
+Dog Days Are Over~Florence + The Machine
+Island in the Sun~Weezer
+Walking on Sunshine~Katrina & The Waves
+Pocketful of Sunshine~Natasha Bedingfield
+Kids~MGMT
+Sweet Disposition~The Temper Trap
+Wake Me Up Before You Go-Go~Wham!
+Come On Eileen~Dexys Midnight Runners
+Dil Chahta Hai~Shankar-Ehsaan-Loy~h
+Gallan Goodiyaan~Shankar Mahadevan~h
+Jaane Tu Ya Jaane Na~Rashid Ali~h`,
+newplace:`Road Trippin’~Red Hot Chili Peppers
+Holocene~Bon Iver
+Mykonos~Fleet Foxes
+Wanderlust~Björk
+Hoppípolla~Sigur Rós
+Adventure of a Lifetime~Coldplay
+Boats and Birds~Gregory and the Hawk
+Safarnama~Lucky Ali~h
+Ilahi~Arijit Singh~h
+Kahin Door Jab Din Dhal Jaaye~Mukesh~h`,
+scenery:`Nuvole Bianche~Ludovico Einaudi
+Experience~Ludovico Einaudi
+Comptine d’un autre été~Yann Tiersen
+Svefn-g-englar~Sigur Rós
+Open Eye Signal~Jon Hopkins
+Arrival of the Birds~The Cinematic Orchestra
+To Build a Home~The Cinematic Orchestra
+Avril 14th~Aphex Twin
+Yeh Jo Des Hai Tera~A.R. Rahman~h
+Piya Haji Ali~A.R. Rahman~h
+Roobaroo~A.R. Rahman~h`,
+aesself:`Pretty Girl~Clairo
+Bags~Clairo
+Pink + White~Frank Ocean
+Show Me How~Men I Trust
+Best Part~Daniel Caesar & H.E.R.
+Motion Sickness~Phoebe Bridgers
+Slow Burn~Kacey Musgraves
+Cold/Mess~Prateek Kuhad~h
+Tum Jab Paas~Prateek Kuhad~h
+Dhundhala~Talwiinder~p`,
+aesplace:`Take Five~The Dave Brubeck Quartet
+So What~Miles Davis
+Blue in Green~Miles Davis
+The Girl from Ipanema~Stan Getz & João Gilberto
+Chega de Saudade~João Gilberto
+Wave~Antonio Carlos Jobim
+Autumn Leaves~Bill Evans
+Cantaloupe Island~Herbie Hancock
+Moanin’~Art Blakey & The Jazz Messengers
+Chaudhvin Ka Chand~Mohammed Rafi~h
+Yeh Raat Yeh Chandni~Hemant Kumar~h`,
+irony:`Common People~Pulp
+Pumped Up Kicks~Foster the People
+99 Luftballons~Nena
+Video Killed the Radio Star~The Buggles
+Ironic~Alanis Morissette
+Pretty Fly (for a White Guy)~The Offspring
+Kids~MGMT
+Money~Pink Floyd
+Bhaag D.K. Bose~Ram Sampath~h
+Emotional Atyachar~Amit Trivedi~h`,
+social:`Fight the Power~Public Enemy
+Pride (In the Name of Love)~U2
+People Have the Power~Patti Smith
+The Times They Are a-Changin’~Bob Dylan
+Sunday Bloody Sunday~U2
+Killing in the Name~Rage Against the Machine
+Strange Fruit~Billie Holiday
+Mississippi Goddam~Nina Simone
+Get Up, Stand Up~Bob Marley
+War~Edwin Starr
+Hum Dekhenge~Iqbal Bano~h
+Class-Sikh~Prabh Deep~h
+Bulla Ki Jaana~Rabbi Shergill~p`,
+deep:`Pale Blue Eyes~The Velvet Underground
+Heroes~David Bowie
+Time~Pink Floyd
+Re: Stacks~Bon Iver
+Pink Moon~Nick Drake
+Famous Blue Raincoat~Leonard Cohen
+A Case of You~Joni Mitchell
+Black~Pearl Jam
+Mad World~Gary Jules
+Zindagi Kaisi Hai Paheli~Manna Dey~h
+Jeena Yahan Marna Yahan~Mukesh~h`,
+regret:`The Night We Met~Lord Huron
+Landslide~Fleetwood Mac
+Back to Black~Amy Winehouse
+Regret~New Order
+Everybody Hurts~R.E.M.
+Dancing On My Own~Robyn
+The Scientist~Coldplay
+Mad World~Gary Jules
+Channa Mereya~Arijit Singh~h
+Kabhi Alvida Naa Kehna~Sonu Nigam~h
+Ae Dil Hai Mushkil~Arijit Singh~h
+Qismat~Ammy Virk~p
+Filhall~B Praak~p`,
+contemplate:`Weightless~Marconi Union
+Spiegel im Spiegel~Arvo Pärt
+On the Nature of Daylight~Max Richter
+Clair de Lune~Claude Debussy
+Music for Airports 1/1~Brian Eno
+An Ending (Ascent)~Brian Eno
+Says~Nils Frahm
+Kun Faya Kun~A.R. Rahman~h
+Piya Haji Ali~A.R. Rahman~h`,
+remember:`Tears in Heaven~Eric Clapton
+Gone Too Soon~Michael Jackson
+Dear Mama~2Pac
+Angel~Sarah McLachlan
+Wild Horses~The Rolling Stones
+The Funeral~Band of Horses
+Lag Ja Gale~Lata Mangeshkar~h
+Jeena Yahan Marna Yahan~Mukesh~h`,
+miss:`Fade Into You~Mazzy Star
+Lovesong~The Cure
+To Be Alone With You~Sufjan Stevens
+Flightless Bird, American Mouth~Iron & Wine
+Wicked Game~Chris Isaak
+Nothing Compares 2 U~Sinéad O’Connor
+First Day of My Life~Bright Eyes
+Tum Se Hi~Mohit Chauhan~h
+Kabhi Kabhi Aditi~Rashid Ali~h
+Ik Kudi~Diljit Dosanjh~p`,
+home:`Homeward Bound~Simon & Garfunkel
+Hometown Glory~Adele
+Home~Phillip Phillips
+Come Home~OneRepublic
+The Boxer~Simon & Garfunkel
+Take Me Home, Country Roads~John Denver
+Chhod Aaye Hum~Hariharan~h
+Ghar Se Nikalte Hi~Udit Narayan~h`,
+fresh:`Here Comes the Sun~The Beatles
+Walking on a Dream~Empire of the Sun
+New Light~John Mayer
+Beautiful Day~U2
+New Soul~Yael Naim
+Anna Sun~WALK THE MOON
+Aashayein~KK~h`,
+glow:`Confident~Demi Lovato
+Cuz I Love You~Lizzo
+About Damn Time~Lizzo
+Vogue~Madonna
+Express Yourself~Madonna
+Flawless~Beyoncé
+Pynk~Janelle Monáe
+Make Me Feel~Janelle Monáe
+Break My Soul~Beyoncé`,
+festival:`Celebration~Kool & The Gang
+Hey Ya!~OutKast
+Good Times~Chic
+Mr. Blue Sky~Electric Light Orchestra
+Don’t Stop Me Now~Queen
+Shout~The Isley Brothers
+Balam Pichkari~Vishal Dadlani~h
+Badtameez Dil~Benny Dayal~h
+Nagada Sang Dhol~Shreya Ghoshal~h
+Tutak Tutak Tutiya~Malkit Singh~p`,
+peace:`Banana Pancakes~Jack Johnson
+Rivers and Roads~The Head and the Heart
+Mushaboom~Feist
+Heartbeats~José González
+Fire and Rain~James Taylor
+Blackbird~The Beatles
+Peaceful Easy Feeling~Eagles
+Aaoge Jab Tum~Ustad Rashid Khan~h
+Phir Le Aaya Dil~Arijit Singh~h`,
+grind:`Murder in My Mind~Kordhell
+Metamorphosis~INTERWORLD
+Hustle Hard~Ace Hood
+All I Do Is Win~DJ Khaled
+Stronger~Kanye West
+N.Y. State of Mind~Nas
+Hard in da Paint~Waka Flocka Flame
+Machayenge~Emiway Bantai~h
+Kar Har Maidaan Fateh~Sukhwinder Singh~h
+Same Beef~Bohemia~p`,
+love:`La Vie en Rose~Édith Piaf
+At Last~Etta James
+Let’s Stay Together~Al Green
+The First Time Ever I Saw Your Face~Roberta Flack
+Moon River~Audrey Hepburn
+Unchained Melody~The Righteous Brothers
+Something~The Beatles
+Wonderful Tonight~Eric Clapton
+Come Away With Me~Norah Jones
+Pehla Nasha~Udit Narayan~h
+Tere Bina~A.R. Rahman~h
+Saiyaan~Satinder Sartaaj~p`
+};
+const VIBE={};Object.entries(VB).forEach(([k,v])=>{VIBE[k]=v.split('\n').map(l=>l.split('~'))});
+function vibeSongs(){
+  const L=$('lang').value,a=(st.mood&&VIBE[st.mood.id])||[],code={hindi:'h',punjabi:'p'}[L];
+  if(L&&L!=='english'&&!code)return [];
+  return shuffle(a.filter(x=>!L?true:L==='english'?!x[2]:x[2]===code)).map(x=>({title:x[0],artist:x[1]}));
+}
+
 // ---- the crate ----
 function row(s,ul,x){
   const li=document.createElement('li'),b=document.createElement('button'),t=document.createElement('span'),a=document.createElement('span');
@@ -453,7 +703,8 @@ async function dig(){
     try{const d=await(await fetch(API+'/songs?vibe='+st.vibe+'&tags='+encodeURIComponent((st.mood?st.mood.t:[]).join(','))+'&depth='+st.depth+'&lang='+encodeURIComponent($('lang').value))).json();songs=d.songs||[];if(d.error)msg=d.error}
     catch(e){msg='Couldn’t reach the song service.'}
   }
-  const cu=curated();if(cu.length){const seen=new Set(cu.map(x=>x.title+x.artist));songs=interleave(cu.slice(0,12),songs.filter(x=>!seen.has(x.title+x.artist)))}
+  const pre=vibeSongs().slice(0,18).concat(curated().slice(0,10)),seen=new Set(pre.map(x=>x.title+x.artist));
+  if(pre.length)songs=pre.concat(songs.filter(x=>!seen.has(x.title+x.artist)));
   if(!songs.length){songs=(SEED[st.vibe]||SEED.moody).map(s=>{const p=s.split('~');return{title:p[0],artist:p[1]}});
     msg=ON?'Showing a starter crate instead. '+msg:'Showing a starter crate. Connect the song service for endless digging.'}
   st.songs=songs;st.note=msg;drawList();
@@ -574,6 +825,7 @@ async function save(){
 }
 $('sv').onclick=save;
 drawTabs();drawStash();
+document.addEventListener('pointermove',e=>{const r=$('eye').getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),d=Math.hypot(dx,dy)||1,k=Math.min(14,d/16);$('iris').setAttribute('transform','translate('+dx/d*k+','+dy/d*k*.5+')')});
 </script>
 </body>
 </html>
